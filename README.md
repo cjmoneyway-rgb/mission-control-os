@@ -124,12 +124,13 @@ Mission Control OS™ uses three evidence classifications:
 |---|---|
 | Public landing page | **BUILT AND VERIFIED** |
 | Project narrative and four-layer governance architecture | **BUILT AND VERIFIED** |
-| Python prototype | **BUILT — VALIDATION REQUIRED** |
+| Python prototype | **BUILT AND VERIFIED** |
+| Deterministic offline classification and specialist execution | **BUILT AND VERIFIED** |
 | OpenAI API classification and specialist execution | **BUILT — VALIDATION REQUIRED** |
-| Department routing and isolated specialist contexts | **BUILT — VALIDATION REQUIRED** |
-| CEO Executive Summary generation | **BUILT — VALIDATION REQUIRED** |
-| JSONL audit logging | **BUILT — VALIDATION REQUIRED** |
-| Automated Governance Check | **ROADMAP — NOT OPERATIONAL** |
+| Department routing and isolated specialist contexts | **BUILT AND VERIFIED** |
+| CEO Executive Summary generation | **BUILT AND VERIFIED** |
+| JSONL audit logging | **BUILT AND VERIFIED** |
+| Automated Governance Check and one revision cycle | **BUILT AND VERIFIED** |
 | Automated HubSpot, Google Drive, and Google Sheets writeback | **ROADMAP — NOT OPERATIONAL** |
 | Full enterprise dashboard and cross-platform synchronization | **ROADMAP — NOT OPERATIONAL** |
 
@@ -145,18 +146,134 @@ Never commit:
 - Private email, calendar, Drive, or Sheets data
 - Unsanitized execution logs
 
-## Planned local setup
+## System architecture
+
+```mermaid
+flowchart TD
+    A["CEO directive"] --> B["Classification router"]
+    B --> C["Configured department"]
+    C --> D["Isolated specialist execution"]
+    D --> E["Governance Check"]
+    E -->|Approved| F["CEO Executive Summary"]
+    E -->|Revision required| D
+    F --> G["JSONL audit record"]
+```
+
+The default `mock` provider executes this complete path deterministically, without
+network access or paid API calls. The optional `openai` provider uses the official
+OpenAI Python SDK and the Responses API for classification and specialist execution.
+The same deterministic Governance Check and audit layer apply to both providers.
+
+## Requirements
+
+- Python 3.10 or newer
+- No API key for the offline demo or tests
+- An OpenAI API key only for optional live mode
+
+## Installation
 
 ```bash
+git clone https://github.com/cjmoneyway-rgb/mission-control-os.git
+cd mission-control-os
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env
-# Add OPENAI_API_KEY to .env. Never commit .env.
-python main.py
 ```
 
-These commands remain **TECHNICAL VERIFICATION REQUIRED** until the source package and dependency file are committed and tested from a clean environment.
+Windows PowerShell activation:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+The offline prototype itself uses only the Python standard library. Installing
+`requirements.txt` adds the official OpenAI SDK for optional live mode.
+
+## Run the judge demo — free and offline
+
+```bash
+python main.py --demo
+```
+
+This routes the approved Build Week directive to the Media & Editorial Division,
+executes the specialist workflow, applies the Governance Check, generates a CEO
+Executive Summary, and appends an execution record to `logs/executions.jsonl`.
+
+Run a custom request:
+
+```bash
+python main.py "Prepare a podcast guest interview and release plan"
+```
+
+Pipe the included sample request and print the complete structured record:
+
+```bash
+python main.py --json < examples/sample_request.txt
+```
+
+Disable audit logging for an ephemeral run:
+
+```bash
+python main.py --demo --no-log
+```
+
+## Optional live OpenAI mode
+
+Create an API key at the OpenAI Platform. Never paste it into source code or
+commit it to GitHub. Set it in your shell, then select the live provider:
+
+```bash
+export OPENAI_API_KEY="your_key_here"
+export OPENAI_MODEL="gpt-5.6"
+python main.py --demo --provider openai
+```
+
+PowerShell:
+
+```powershell
+$env:OPENAI_API_KEY="your_key_here"
+$env:OPENAI_MODEL="gpt-5.6"
+python main.py --demo --provider openai
+```
+
+`.env.example` documents the supported variable names. This minimal CLI does
+not automatically load dotenv files, which prevents accidental secret loading;
+set variables through your shell or an approved secret manager.
+
+## Testing
+
+All automated tests use the deterministic mock provider and make zero API calls:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+The suite verifies routing, fallback behavior, Governance Check enforcement,
+secret-pattern rejection, JSONL audit logging, CLI execution, and input validation.
+
+## Repository map
+
+```text
+mission-control-os/
+├── main.py                         # CLI application entry point
+├── mission_control/
+│   ├── engine.py                   # Route → execute → review → revise → log
+│   ├── providers.py                # Mock and OpenAI Responses API providers
+│   ├── governance.py               # Deterministic review rules
+│   ├── audit.py                    # Append-only JSONL execution records
+│   ├── config.py                   # Department configuration loader
+│   ├── models.py                   # Typed workflow data contracts
+│   └── departments.json            # Governed specialist definitions
+├── examples/sample_request.txt     # Approved demonstration directive
+└── tests/                           # Offline unit and CLI tests
+```
+
+## Current verification boundary
+
+The offline end-to-end prototype is implemented and testable. Live OpenAI mode
+is implemented against the Responses API but remains **BUILT — VALIDATION REQUIRED**
+until it is run with a user-provided API key. External CRM/Drive/Sheets writeback
+and the unified dashboard remain **ROADMAP — NOT OPERATIONAL**.
 
 ## What we learned
 

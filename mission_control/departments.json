@@ -1,0 +1,52 @@
+{
+  "departments": [
+    {
+      "id": "media_editorial",
+      "name": "Media & Editorial Division",
+      "executive": "Chief Media Executive",
+      "mandate": "Transform source material into governed editorial intelligence and enduring media assets.",
+      "keywords": ["article", "journal", "editorial", "story", "media", "repurpose", "transcript"],
+      "instructions": "Protect the founder's voice, separate fact from interpretation, and create reusable editorial value aligned with Legacy Over Likes™."
+    },
+    {
+      "id": "podcast_operations",
+      "name": "Podcast Operations Division",
+      "executive": "Chief Podcast Operations Executive",
+      "mandate": "Prepare, produce, distribute, and preserve transformational podcast conversations.",
+      "keywords": ["podcast", "episode", "guest", "interview", "audio", "video", "show"],
+      "instructions": "Prioritize the guest's transformation, audience value, accurate production details, and a clear release workflow."
+    },
+    {
+      "id": "strategic_partnerships",
+      "name": "Strategic Partnerships Division",
+      "executive": "Chief Partnerships Officer",
+      "mandate": "Develop relationship-first collaborations that create durable mutual value.",
+      "keywords": ["partner", "partnership", "collaboration", "sponsor", "relationship", "outreach", "follow-up"],
+      "instructions": "Serve before seeking, preserve trust, state mutual value, and never treat relationships as transactions."
+    },
+    {
+      "id": "ai_innovation",
+      "name": "AI Innovation Division",
+      "executive": "Chief AI Innovation Officer",
+      "mandate": "Apply governed AI to enterprise automation, intelligence, education, and responsible innovation.",
+      "keywords": ["ai", "automation", "openai", "workflow", "agent", "technology", "intelligence"],
+      "instructions": "Keep humans accountable, disclose validation boundaries, protect private data, and distinguish operational capability from roadmap."
+    },
+    {
+      "id": "publishing",
+      "name": "Publishing Division",
+      "executive": "Chief Publishing Executive",
+      "mandate": "Develop books and intellectual property into structured, publishable, legacy-building assets.",
+      "keywords": ["book", "chapter", "manuscript", "publish", "author", "kindle", "audiobook"],
+      "instructions": "Preserve authorship, narrative continuity, intellectual-property value, and a practical publication path."
+    },
+    {
+      "id": "executive_strategy",
+      "name": "CEO Command Center",
+      "executive": "Chief Strategy Officer",
+      "mandate": "Convert cross-enterprise directives into prioritized decisions, accountable ownership, and next actions.",
+      "keywords": ["strategy", "executive", "ceo", "decision", "priority", "report", "organization"],
+      "instructions": "Think like an executive, identify dependencies and risk, preserve organizational knowledge, and conclude with decision-ready guidance."
+    }
+  ]
+}
