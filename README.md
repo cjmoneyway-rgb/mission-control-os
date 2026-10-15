@@ -197,7 +197,7 @@ python main.py --demo
 
 This routes the approved Build Week directive to the Media & Editorial Division,
 executes the specialist workflow, applies the Governance Check, generates a CEO
-Executive Summary, and appends an execution record to `logs/executions.jsonl`.
+Executive Summary, and appends minimized execution metadata to `logs/executions.jsonl`.
 
 Run a custom request:
 
@@ -217,7 +217,19 @@ Disable audit logging for an ephemeral run:
 python main.py --demo --no-log
 ```
 
+## Phase 1A hardening
+
+See [security boundaries and unresolved decisions](docs/phase-1a-security.md).
+Technical governance validation does not grant organizational authorization.
+Final rejected output is blocked; default audit records contain metadata only.
+Registry and lifecycle contracts are synthetic foundations, not active workflows.
+
 ## Optional live OpenAI mode
+
+Live requests now require a trusted programmatic safety gate that explicitly clears
+authorization and sensitive-data review for every outbound payload. The CLI has no
+override and blocks live transmission. The historical shell example below only
+selects the provider; credentials alone cannot authorize a request.
 
 Create an API key at the OpenAI Platform. Never paste it into source code or
 commit it to GitHub. Set it in your shell, then select the live provider:

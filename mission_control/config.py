@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import json
+from .json_io import strict_json_loads
 from pathlib import Path
 
 from .models import Department
@@ -13,10 +13,17 @@ DEFAULT_CONFIG = Path(__file__).parent / "departments.json"
 
 def load_departments(path: Path | str = DEFAULT_CONFIG) -> dict[str, Department]:
     config_path = Path(path)
-    payload = json.loads(config_path.read_text(encoding="utf-8"))
+    payload = strict_json_loads(config_path.read_text(encoding="utf-8"))
     departments: dict[str, Department] = {}
 
-    for item in payload.get("departments", []):
+    if not isinstance(payload, dict) or not isinstance(payload.get("departments"), list):
+        raise ValueError("Malformed department projection")
+    for item in payload["departments"]:
+        required = {"id", "name", "executive", "mandate", "keywords", "instructions"}
+        if not isinstance(item, dict) or set(item) != required:
+            raise ValueError("Malformed department projection")
+        if not isinstance(item["keywords"], list) or any(not isinstance(k, str) for k in item["keywords"]):
+            raise ValueError("Invalid department keywords")
         department = Department(
             id=item["id"],
             name=item["name"],

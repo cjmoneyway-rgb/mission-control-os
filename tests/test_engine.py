@@ -8,6 +8,7 @@ from pathlib import Path
 from mission_control import MissionControlOS
 from mission_control.governance import review_output
 from mission_control.models import RouteDecision
+from tests.hardening_support import synthetic_clearance
 
 
 class RevisionProvider:
@@ -45,6 +46,7 @@ class MissionControlTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             log_path = Path(directory) / "audit.jsonl"
             system = MissionControlOS(provider="mock", audit_log=log_path)
+            system.audit.include_route = True
             record = system.run("Prepare a podcast guest interview")
             payload = json.loads(log_path.read_text(encoding="utf-8"))
             self.assertEqual(payload["execution_id"], record.execution_id)
@@ -76,7 +78,7 @@ class MissionControlTests(unittest.TestCase):
 
     def test_governance_feedback_triggers_one_revision(self) -> None:
         provider = RevisionProvider()
-        system = MissionControlOS(provider=provider, audit_log=None)
+        system = MissionControlOS(provider=provider, audit_log=None, safety_gate=synthetic_clearance)
         record = system.run("Prepare an executive decision")
         self.assertEqual(provider.calls, 2)
         self.assertEqual(record.revision_count, 1)

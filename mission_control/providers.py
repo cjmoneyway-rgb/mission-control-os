@@ -4,8 +4,16 @@ from __future__ import annotations
 
 import json
 from typing import Protocol
+from dataclasses import dataclass
 
 from .models import Department, RouteDecision
+from .json_io import strict_json_loads
+
+
+@dataclass(frozen=True)
+class SafetyDecision:
+    authorized: bool
+    sensitive_data_cleared: bool
 
 
 class Provider(Protocol):
@@ -105,7 +113,8 @@ class OpenAIProvider:
 
     name = "openai"
 
-    def __init__(self, model: str = "gpt-5.6") -> None:
+    def __init__(self, model: str = "gpt-5.6", safety_gate=None) -> None:
+        self.safety_gate = safety_gate
         try:
             from openai import OpenAI
         except ImportError as exc:
@@ -116,11 +125,19 @@ class OpenAIProvider:
         self.model = model
 
     def _respond(self, instructions: str, prompt: str) -> str:
+        # A trusted caller must review the exact outbound payload for both authorization
+        # and sensitive data. Deny by default; credentials alone confer no authority.
+        payload = {"model": self.model, "instructions": instructions, "input": prompt}
+        decision = self.safety_gate(dict(payload)) if self.safety_gate else None
+        if not isinstance(decision, SafetyDecision) or decision.authorized is not True or decision.sensitive_data_cleared is not True:
+            raise RuntimeError("External provider transmission blocked by safety gate")
         response = self.client.responses.create(
             model=self.model,
             instructions=instructions,
             input=prompt,
         )
+        if not isinstance(getattr(response, "output_text", None), str) or not response.output_text.strip():
+            raise RuntimeError("Malformed provider output")
         return response.output_text
 
     def classify(
@@ -140,14 +157,12 @@ class OpenAIProvider:
             prompt,
         )
         try:
-            data = json.loads(raw)
-            return RouteDecision(
-                department_id=str(data["department_id"]),
-                rationale=str(data["rationale"]),
-                confidence=float(data["confidence"]),
-            )
-        except (KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
-            raise RuntimeError(f"Router returned invalid JSON: {raw[:240]}") from exc
+            data = strict_json_loads(raw)
+            if not isinstance(data, dict) or set(data) != {"department_id", "rationale", "confidence"}:
+                raise ValueError("Malformed routing response")
+            return RouteDecision(**data)
+        except (KeyError, TypeError, ValueError):
+            raise RuntimeError("Router returned an invalid routing response") from None
 
     def execute(
         self,
