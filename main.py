@@ -26,7 +26,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("directive", nargs="*", help="Executive directive to process")
     parser.add_argument(
         "--provider", choices=("mock", "openai"), default="mock",
-        help="mock is deterministic and free; openai uses the Responses API",
+        help="mock is offline; openai requires a trusted programmatic safety gate",
     )
     parser.add_argument("--model", default=os.getenv("OPENAI_MODEL", "gpt-5.6"))
     parser.add_argument("--demo", action="store_true", help="Run the approved sample directive")
@@ -58,8 +58,8 @@ def main(argv: list[str] | None = None) -> int:
             audit_log=None if args.no_log else Path(args.audit_log),
         )
         record = system.run(directive)
-    except (RuntimeError, ValueError) as exc:
-        print(f"Mission Control error: {exc}", file=sys.stderr)
+    except Exception:
+        print("Mission Control execution blocked or invalid. No result delivered.", file=sys.stderr)
         return 1
 
     if args.json:
@@ -70,7 +70,7 @@ def main(argv: list[str] | None = None) -> int:
             f"\n---\nExecution ID: {record.execution_id}\n"
             f"Provider: {record.provider}\n"
             f"Route: {record.department.name} ({record.route.confidence:.0%})\n"
-            f"Governance: {record.governance.status}"
+            f"Governance: {record.governance.status} (technical checks only; no organizational authorization)"
         )
     return 0
 

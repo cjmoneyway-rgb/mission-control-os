@@ -6,6 +6,8 @@ from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from typing import Any
 from uuid import uuid4
+import math
+from .contracts import text
 
 
 @dataclass(frozen=True)
@@ -17,12 +19,26 @@ class Department:
     keywords: tuple[str, ...]
     instructions: str
 
+    def __post_init__(self):
+        for value in (self.id, self.name, self.executive, self.mandate, self.instructions):
+            text(value)
+        if not isinstance(self.keywords, tuple) or not self.keywords:
+            raise ValueError('Department keywords must be a nonempty tuple')
+        for keyword in self.keywords:
+            text(keyword)
+
 
 @dataclass(frozen=True)
 class RouteDecision:
     department_id: str
     rationale: str
     confidence: float
+
+    def __post_init__(self):
+        text(self.department_id)
+        text(self.rationale)
+        if type(self.confidence) not in (float, int) or not math.isfinite(self.confidence) or not 0 <= self.confidence <= 1:
+            raise ValueError('Routing confidence must be finite and between 0 and 1')
 
 
 @dataclass(frozen=True)

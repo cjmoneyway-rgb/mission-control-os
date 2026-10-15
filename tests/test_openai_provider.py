@@ -6,7 +6,7 @@ import unittest
 from unittest.mock import patch
 
 from mission_control.config import load_departments
-from mission_control.providers import OpenAIProvider
+from mission_control.providers import OpenAIProvider, SafetyDecision
 
 
 class FakeResponses:
@@ -36,7 +36,7 @@ class OpenAIProviderContractTests(unittest.TestCase):
     def test_uses_responses_api_without_network(self) -> None:
         fake_module = types.SimpleNamespace(OpenAI=FakeOpenAI)
         with patch.dict(sys.modules, {"openai": fake_module}):
-            provider = OpenAIProvider(model="test-model")
+            provider = OpenAIProvider(model="test-model", safety_gate=lambda payload: SafetyDecision(True, True))
             departments = load_departments()
             route = provider.classify("Build an AI workflow", departments)
             output = provider.execute(
