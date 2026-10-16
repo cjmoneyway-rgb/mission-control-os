@@ -3,6 +3,8 @@
 Never installs software or uses a supplied/cloud DSN. When tools are present,
 starts ONLY its own disposable instance on a private local Unix socket, with TCP
 disabled. Local trust auth is limited to this synthetic disposable cluster.
+Explicit manual CI mode instead uses the job-owned loopback service through the
+GitHub-hosted guard and job-generated credentials; setup errors cannot skip tests.
 """
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, replace
@@ -33,7 +35,8 @@ def binary(name):
 
 INITDB,PG_CTL=binary('initdb'),binary('pg_ctl')
 DRIVER=importlib.util.find_spec('psycopg') is not None
-AVAILABLE=bool(INITDB and PG_CTL and DRIVER and os.name=='posix' and os.geteuid()!=0)
+CI_SERVICE=os.environ.get('MC_SYN_CI_POSTGRES')=='1'
+AVAILABLE=CI_SERVICE or bool(INITDB and PG_CTL and DRIVER and os.name=='posix' and os.geteuid()!=0)
 REASON='UNVERIFIED PostgreSQL integration: requires existing initdb, pg_ctl, psycopg 3, POSIX, and non-root user; no install/fallback'
 
 
@@ -43,6 +46,12 @@ class PostgreSQLIntegrationTests(unittest.TestCase):
     def setUpClass(cls):
         import psycopg
         cls.psycopg=psycopg
+        if CI_SERVICE:
+            from scripts.ci_postgres import service_connection
+            with service_connection('postgres','syn-admin') as connection:
+                if connection.execute("SHOW server_version_num").fetchone()[0] != "170011":
+                    raise RuntimeError("Unexpected disposable PostgreSQL version")
+            return
         cls.temporary=tempfile.TemporaryDirectory(prefix='mc-syn-pg-',dir='/tmp')
         root=Path(cls.temporary.name)
         cls.data=root/'data'
@@ -61,6 +70,8 @@ class PostgreSQLIntegrationTests(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        if CI_SERVICE:
+            return
         try:
             subprocess.run([PG_CTL,'-D',str(cls.data),'-m','fast','-w','stop'],check=True,capture_output=True,text=True)
         finally:
@@ -68,11 +79,23 @@ class PostgreSQLIntegrationTests(unittest.TestCase):
 
     def new_store(self):
         database='syn-proof-'+uuid.uuid4().hex
-        with self.psycopg.connect(host=str(self.socket),dbname='postgres',user='syn-admin',autocommit=True) as connection:
+        if CI_SERVICE:
+            from scripts.ci_postgres import service_connection, credentials
+            metadata=lambda:service_connection('postgres','syn-admin',autocommit=True)
+            admin=lambda:service_connection(database,'syn-admin')
+            runtime=lambda:service_connection(database,'syn-runtime')
+        else:
+            metadata=lambda:self.psycopg.connect(host=str(self.socket),dbname='postgres',user='syn-admin',autocommit=True)
+            admin=lambda:local_connection(self.socket,database,'syn-admin')
+            runtime=lambda:local_connection(self.socket,database,'syn-runtime')
+        with metadata() as connection:
             connection.execute(self.psycopg.sql.SQL('CREATE DATABASE {}').format(self.psycopg.sql.Identifier(database)))
-        admin=lambda:local_connection(self.socket,database,'syn-admin')
         apply_local_migration(admin,self.authority,session_ref('migration_operator'),'syn-tenant-1',1)
-        store=LocalSyntheticStore(lambda:local_connection(self.socket,database,'syn-runtime'),self.authority,self.custody)
+        if CI_SERVICE:
+            with admin() as connection:
+                connection.execute(self.psycopg.sql.SQL('ALTER ROLE {} PASSWORD {}').format(
+                    self.psycopg.sql.Identifier('syn-runtime'),self.psycopg.sql.Literal(credentials()['runtime_password'])))
+        store=LocalSyntheticStore(runtime,self.authority,self.custody)
         return store,admin
 
     def setUp(self):

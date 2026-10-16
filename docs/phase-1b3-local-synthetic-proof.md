@@ -1,6 +1,7 @@
 # Phase 1B.3 — Local Synthetic Persistence Proof
 
-**Uncommitted for one CEO review. PostgreSQL integration is UNVERIFIED.**
+**Reviewed implementation committed as `0eae64c`. Remote PostgreSQL verification
+remains UNVERIFIED until the manual workflow reports all 95 tests with zero skips.**
 
 Baseline: `3f8b00d`, current main when this branch was created, containing the
 14-entity Phase 1B foundation. Branch: `phase-1b3/synthetic-persistence-proof`.
@@ -20,7 +21,8 @@ CLI/engine, or load the new adapter by default. All data and identities are synt
 | tests/test_postgres_integration.py | Real disposable PostgreSQL tests, explicitly skipped when installed prerequisites are unavailable |
 | docs/phase-1b3-local-synthetic-proof.md | This scope, evidence, procedures, limitations, and review handoff |
 
-No requirements, existing runtime code, existing tests, configuration, or logical
+At the original eight-file review, no requirements, existing runtime code, existing
+tests, configuration, or logical
 migration manifest were changed. No service or package was installed. No production
 migration or new migration of any kind was executed in this environment.
 
@@ -205,12 +207,48 @@ data or a sandbox; the supplied local connector rejects TCP/remote paths.
 - Pending integration tests are a blocker to claiming PostgreSQL verification, not
   a reason to substitute a different database or quietly install services.
 
-Recommended next step: one focused CEO code review of these uncommitted files.
+Original review handoff (superseded by the authorized verification step): one focused CEO code review of these uncommitted files.
 Then, only with approved existing tooling or separate tooling authorization, run
 all ten PostgreSQL integration tests in an isolated synthetic environment and fix
 any failures before committing or connecting this adapter to existing application
 flows. Confidential pilot availability, provider selection, key custody, identity,
 policy ownership, and pilot launch remain separately approved decisions.
 
-No commit, push, merge, deployment, environment publication, cloud connection,
+At the original review handoff, no commit, push, merge, deployment, environment publication, cloud connection,
 confidential-data entry, external integration, or pilot activation occurred.
+
+## Authorized manual PostgreSQL verification
+
+`.github/workflows/synthetic-postgres.yml` has only `workflow_dispatch`, a standard
+Ubuntu 24.04 runner, and `contents: read`. Checkout and Python setup use immutable
+release SHAs; official PostgreSQL 17.11/bookworm uses an immutable image digest.
+Only `psycopg[binary]==3.3.6` is added to development requirements.
+
+`scripts/ci_postgres.py` generates two masked random passwords inside the job,
+stores them temporarily with mode 0600, replaces bootstrap host trust with SCRAM,
+and disables the bootstrap postgres login before tests. The initial trust listener
+is published only on runner loopback; this pattern is strictly for disposable
+synthetic CI, never a protected production database. Administrative and runtime
+identities are separate. No repository, organization, or environment secrets are
+referenced. Only the explicit GitHub-hosted job guard permits the service helper;
+there is no supplied DSN or remote host option.
+
+Each test creates its own synthetic database. Migrations run explicitly against
+that disposable service only; no application startup path changes. The runner
+requires exactly 95 tests including all ten PostgreSQL tests and rejects skips,
+errors, failures, expected failures, or unexpected successes. The job summary
+records actual server version and execution counts. Credentials are removed in an
+always-run cleanup step; GitHub destroys the service container when the job ends.
+No artifacts, caches, deployment, external integration, or pilot is enabled.
+
+GitHub normally requires a workflow on the default branch before manual dispatch.
+A branch-only workflow and blocked GitHub API cannot establish a successful run.
+Do not weaken triggers, merge, or claim database verification to bypass this gate.
+
+Local pre-push verification used the identical pinned image in an isolated Docker
+container: PostgreSQL 17.11 (Debian 17.11-1.pgdg12+2), all 95 tests executed,
+including ten PostgreSQL tests; zero failures, errors, or skips. An external,
+uncommitted local harness explicitly replaced the GitHub-context guard for this
+local test only; the committed guard remains enforced. The container, its volumes,
+and temporary credentials were destroyed afterward. This is local database proof,
+not evidence that GitHub Actions dispatch or runner provisioning succeeded.
