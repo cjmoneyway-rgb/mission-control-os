@@ -1,0 +1,2472 @@
+{
+  "format": "syn-pilot-schema-v1",
+  "tables": {
+    "approval_evidence": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "evidence_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "record_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "record_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "content_digest": {
+          "type": "text",
+          "nullable": false
+        },
+        "grantor_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "policy_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "valid_from": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "expires_at": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "status": {
+          "type": "text",
+          "nullable": false
+        },
+        "proof_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "evidence_reference"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "record_reference",
+            "record_revision"
+          ],
+          "target": "registry_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "record_reference",
+            "revision"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "grantor_reference"
+          ],
+          "target": "subjects",
+          "target_columns": [
+            "tenant_reference",
+            "subject_reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "policy_revision"
+          ],
+          "target": "policy_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "policy_revision"
+          ]
+        }
+      ]
+    },
+    "approval_revocations": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "evidence_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "revocation_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "revoked_at": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "actor_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "revocation_reference"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "evidence_reference"
+          ],
+          "target": "approval_evidence",
+          "target_columns": [
+            "tenant_reference",
+            "evidence_reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "actor_reference"
+          ],
+          "target": "subjects",
+          "target_columns": [
+            "tenant_reference",
+            "subject_reference"
+          ]
+        }
+      ]
+    },
+    "idempotency_receipts": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "operation_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "idempotency_key": {
+          "type": "text",
+          "nullable": false
+        },
+        "payload_digest": {
+          "type": "text",
+          "nullable": false
+        },
+        "result_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "result_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "created_at": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "operation_reference",
+          "idempotency_key"
+        ]
+      ],
+      "foreign_keys": []
+    },
+    "journey_events": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "event_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "journey_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "sequence": {
+          "type": "int8",
+          "nullable": false
+        },
+        "packet_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "packet_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "previous_digest": {
+          "type": "text",
+          "nullable": true
+        },
+        "content_digest": {
+          "type": "text",
+          "nullable": false
+        },
+        "payload": {
+          "type": "jsonb",
+          "nullable": false
+        },
+        "active": {
+          "type": "bool",
+          "nullable": false
+        },
+        "created_at": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "actor_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "policy_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        },
+        "schema_revision": {
+          "type": "int8",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "event_reference"
+        ],
+        [
+          "tenant_reference",
+          "journey_reference",
+          "sequence"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "packet_reference",
+            "packet_revision"
+          ],
+          "target": "packet_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "packet_reference",
+            "revision"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "actor_reference"
+          ],
+          "target": "subjects",
+          "target_columns": [
+            "tenant_reference",
+            "subject_reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "policy_revision"
+          ],
+          "target": "policy_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "policy_revision"
+          ]
+        }
+      ]
+    },
+    "journey_heads": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "journey_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "sequence": {
+          "type": "int8",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "journey_reference"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "journey_reference",
+            "sequence"
+          ],
+          "target": "journey_events",
+          "target_columns": [
+            "tenant_reference",
+            "journey_reference",
+            "sequence"
+          ]
+        }
+      ]
+    },
+    "packet_heads": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "packet_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "packet_reference"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "packet_reference",
+            "revision"
+          ],
+          "target": "packet_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "packet_reference",
+            "revision"
+          ]
+        }
+      ]
+    },
+    "packet_revisions": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "packet_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "previous_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "registry_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "registry_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "state": {
+          "type": "text",
+          "nullable": false
+        },
+        "payload": {
+          "type": "jsonb",
+          "nullable": false
+        },
+        "content_digest": {
+          "type": "text",
+          "nullable": false
+        },
+        "created_at": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "actor_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "policy_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        },
+        "schema_revision": {
+          "type": "int8",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "packet_reference",
+          "revision"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "registry_reference",
+            "registry_revision"
+          ],
+          "target": "registry_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "record_reference",
+            "revision"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "actor_reference"
+          ],
+          "target": "subjects",
+          "target_columns": [
+            "tenant_reference",
+            "subject_reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "policy_revision"
+          ],
+          "target": "policy_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "policy_revision"
+          ]
+        }
+      ]
+    },
+    "pilot_decisions": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "journey_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "event_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "classification": {
+          "type": "text",
+          "nullable": false
+        },
+        "rule_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "rule_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "rule_digest": {
+          "type": "text",
+          "nullable": false
+        },
+        "rule_kind": {
+          "type": "text",
+          "nullable": false
+        },
+        "approval_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "proposal_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "event_digest": {
+          "type": "text",
+          "nullable": false
+        },
+        "disposition": {
+          "type": "text",
+          "nullable": false
+        },
+        "reason_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "content_digest": {
+          "type": "text",
+          "nullable": false
+        },
+        "payload": {
+          "type": "jsonb",
+          "nullable": false
+        },
+        "state": {
+          "type": "text",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "journey_reference",
+          "event_reference"
+        ],
+        [
+          "tenant_reference",
+          "reference"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "approval_reference",
+            "journey_reference",
+            "event_reference",
+            "proposal_revision",
+            "event_digest"
+          ],
+          "target": "pilot_evidence",
+          "target_columns": [
+            "tenant_reference",
+            "reference",
+            "journey_reference",
+            "event_reference",
+            "proposal_revision",
+            "event_digest"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "journey_reference",
+            "event_reference"
+          ],
+          "target": "pilot_events",
+          "target_columns": [
+            "tenant_reference",
+            "journey_reference",
+            "event_reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "rule_kind",
+            "rule_reference",
+            "rule_revision",
+            "rule_digest"
+          ],
+          "target": "routing_records",
+          "target_columns": [
+            "tenant_reference",
+            "kind",
+            "reference",
+            "revision",
+            "content_digest"
+          ]
+        }
+      ]
+    },
+    "pilot_deliverables": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "journey_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "event_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "kind": {
+          "type": "text",
+          "nullable": false
+        },
+        "reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "packet_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "state": {
+          "type": "text",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "journey_reference",
+          "event_reference",
+          "kind",
+          "reference",
+          "packet_reference"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "journey_reference",
+            "event_reference",
+            "packet_reference"
+          ],
+          "target": "pilot_packet_links",
+          "target_columns": [
+            "tenant_reference",
+            "journey_reference",
+            "event_reference",
+            "packet_reference"
+          ]
+        }
+      ]
+    },
+    "pilot_events": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "journey_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "sequence": {
+          "type": "int8",
+          "nullable": false
+        },
+        "event_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "proposal_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "event_digest": {
+          "type": "text",
+          "nullable": false
+        },
+        "previous_sequence": {
+          "type": "int8",
+          "nullable": true
+        },
+        "previous_digest": {
+          "type": "text",
+          "nullable": true
+        },
+        "content_digest": {
+          "type": "text",
+          "nullable": false
+        },
+        "original_classification": {
+          "type": "text",
+          "nullable": false
+        },
+        "stage_index": {
+          "type": "int8",
+          "nullable": false
+        },
+        "disposition": {
+          "type": "text",
+          "nullable": false
+        },
+        "payload": {
+          "type": "jsonb",
+          "nullable": false
+        },
+        "state": {
+          "type": "text",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "journey_reference",
+          "sequence"
+        ],
+        [
+          "tenant_reference",
+          "journey_reference",
+          "event_reference"
+        ],
+        [
+          "tenant_reference",
+          "journey_reference",
+          "sequence",
+          "content_digest"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "journey_reference",
+            "event_reference",
+            "proposal_revision",
+            "event_digest"
+          ],
+          "target": "pilot_proposals",
+          "target_columns": [
+            "tenant_reference",
+            "journey_reference",
+            "event_reference",
+            "revision",
+            "content_digest"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "journey_reference",
+            "previous_sequence",
+            "previous_digest"
+          ],
+          "target": "pilot_events",
+          "target_columns": [
+            "tenant_reference",
+            "journey_reference",
+            "sequence",
+            "content_digest"
+          ]
+        }
+      ]
+    },
+    "pilot_evidence": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "journey_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "event_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "proposal_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "event_digest": {
+          "type": "text",
+          "nullable": false
+        },
+        "grantor_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "policy_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "valid_from": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "expires_at": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "proof": {
+          "type": "jsonb",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "reference"
+        ],
+        [
+          "tenant_reference",
+          "reference",
+          "journey_reference",
+          "event_reference",
+          "proposal_revision",
+          "event_digest"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "grantor_reference"
+          ],
+          "target": "subjects",
+          "target_columns": [
+            "tenant_reference",
+            "subject_reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "journey_reference",
+            "event_reference",
+            "proposal_revision",
+            "event_digest"
+          ],
+          "target": "pilot_proposals",
+          "target_columns": [
+            "tenant_reference",
+            "journey_reference",
+            "event_reference",
+            "revision",
+            "content_digest"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "policy_revision"
+          ],
+          "target": "policy_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "policy_revision"
+          ]
+        }
+      ]
+    },
+    "pilot_heads": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "journey_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "version": {
+          "type": "int8",
+          "nullable": false
+        },
+        "completed_stage": {
+          "type": "int8",
+          "nullable": false
+        },
+        "last_event_reference": {
+          "type": "text",
+          "nullable": true
+        },
+        "progress": {
+          "type": "text",
+          "nullable": false
+        },
+        "state": {
+          "type": "text",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "journey_reference"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "journey_reference"
+          ],
+          "target": "pilot_journeys",
+          "target_columns": [
+            "tenant_reference",
+            "reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "journey_reference",
+            "last_event_reference"
+          ],
+          "target": "pilot_events",
+          "target_columns": [
+            "tenant_reference",
+            "journey_reference",
+            "event_reference"
+          ]
+        }
+      ]
+    },
+    "pilot_journeys": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "intake_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "intake_kind": {
+          "type": "text",
+          "nullable": false
+        },
+        "intake_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "original_classification": {
+          "type": "text",
+          "nullable": false
+        },
+        "payload": {
+          "type": "jsonb",
+          "nullable": false
+        },
+        "content_digest": {
+          "type": "text",
+          "nullable": false
+        },
+        "state": {
+          "type": "text",
+          "nullable": false
+        },
+        "actor_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "policy_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "created_at": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "reference"
+        ],
+        [
+          "tenant_reference",
+          "intake_reference"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "actor_reference"
+          ],
+          "target": "subjects",
+          "target_columns": [
+            "tenant_reference",
+            "subject_reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "intake_kind",
+            "intake_reference",
+            "intake_revision"
+          ],
+          "target": "routing_records",
+          "target_columns": [
+            "tenant_reference",
+            "kind",
+            "reference",
+            "revision"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "policy_revision"
+          ],
+          "target": "policy_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "policy_revision"
+          ]
+        }
+      ]
+    },
+    "pilot_packet_links": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "journey_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "event_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "packet_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "packet_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "packet_kind": {
+          "type": "text",
+          "nullable": false
+        },
+        "state": {
+          "type": "text",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "journey_reference",
+          "event_reference",
+          "packet_reference"
+        ],
+        [
+          "tenant_reference",
+          "packet_reference"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "journey_reference",
+            "event_reference"
+          ],
+          "target": "pilot_events",
+          "target_columns": [
+            "tenant_reference",
+            "journey_reference",
+            "event_reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "packet_kind",
+            "packet_reference",
+            "packet_revision"
+          ],
+          "target": "routing_records",
+          "target_columns": [
+            "tenant_reference",
+            "kind",
+            "reference",
+            "revision"
+          ]
+        }
+      ]
+    },
+    "pilot_proposal_heads": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "journey_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "event_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "journey_reference",
+          "event_reference"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "journey_reference",
+            "event_reference",
+            "revision"
+          ],
+          "target": "pilot_proposals",
+          "target_columns": [
+            "tenant_reference",
+            "journey_reference",
+            "event_reference",
+            "revision"
+          ]
+        }
+      ]
+    },
+    "pilot_proposals": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "journey_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "event_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "previous_revision": {
+          "type": "int8",
+          "nullable": true
+        },
+        "content_digest": {
+          "type": "text",
+          "nullable": false
+        },
+        "payload": {
+          "type": "jsonb",
+          "nullable": false
+        },
+        "state": {
+          "type": "text",
+          "nullable": false
+        },
+        "actor_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "policy_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "created_at": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "journey_reference",
+          "event_reference",
+          "revision"
+        ],
+        [
+          "tenant_reference",
+          "journey_reference",
+          "event_reference",
+          "revision",
+          "content_digest"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "actor_reference"
+          ],
+          "target": "subjects",
+          "target_columns": [
+            "tenant_reference",
+            "subject_reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "journey_reference",
+            "event_reference",
+            "previous_revision"
+          ],
+          "target": "pilot_proposals",
+          "target_columns": [
+            "tenant_reference",
+            "journey_reference",
+            "event_reference",
+            "revision"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "journey_reference"
+          ],
+          "target": "pilot_journeys",
+          "target_columns": [
+            "tenant_reference",
+            "reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "policy_revision"
+          ],
+          "target": "policy_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "policy_revision"
+          ]
+        }
+      ]
+    },
+    "pilot_revocations": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "actor_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "created_at": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "reference"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "actor_reference"
+          ],
+          "target": "subjects",
+          "target_columns": [
+            "tenant_reference",
+            "subject_reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "reference"
+          ],
+          "target": "pilot_evidence",
+          "target_columns": [
+            "tenant_reference",
+            "reference"
+          ]
+        }
+      ]
+    },
+    "policy_revisions": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "policy_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "content_digest": {
+          "type": "text",
+          "nullable": false
+        },
+        "rules_document": {
+          "type": "jsonb",
+          "nullable": false
+        },
+        "valid_from": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "expires_at": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "policy_revision"
+        ]
+      ],
+      "foreign_keys": []
+    },
+    "registry_heads": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "record_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "record_reference"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "record_reference",
+            "revision"
+          ],
+          "target": "registry_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "record_reference",
+            "revision"
+          ]
+        }
+      ]
+    },
+    "registry_revisions": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "record_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "previous_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "state": {
+          "type": "text",
+          "nullable": false
+        },
+        "payload": {
+          "type": "jsonb",
+          "nullable": false
+        },
+        "content_digest": {
+          "type": "text",
+          "nullable": false
+        },
+        "created_at": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "actor_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "policy_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        },
+        "schema_revision": {
+          "type": "int8",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "record_reference",
+          "revision"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "actor_reference"
+          ],
+          "target": "subjects",
+          "target_columns": [
+            "tenant_reference",
+            "subject_reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "policy_revision"
+          ],
+          "target": "policy_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "policy_revision"
+          ]
+        }
+      ]
+    },
+    "role_bindings": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "binding_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "subject_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "role_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "policy_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "valid_from": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "expires_at": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "binding_reference"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "subject_reference"
+          ],
+          "target": "subjects",
+          "target_columns": [
+            "tenant_reference",
+            "subject_reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "policy_revision"
+          ],
+          "target": "policy_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "policy_revision"
+          ]
+        }
+      ]
+    },
+    "routing_events": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "intake_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "intake_kind": {
+          "type": "text",
+          "nullable": false
+        },
+        "intake_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "sequence": {
+          "type": "int8",
+          "nullable": false
+        },
+        "previous_sequence": {
+          "type": "int8",
+          "nullable": true
+        },
+        "previous_digest": {
+          "type": "text",
+          "nullable": true
+        },
+        "content_digest": {
+          "type": "text",
+          "nullable": false
+        },
+        "payload": {
+          "type": "jsonb",
+          "nullable": false
+        },
+        "state": {
+          "type": "text",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "intake_reference",
+          "sequence"
+        ],
+        [
+          "tenant_reference",
+          "intake_reference",
+          "sequence",
+          "content_digest"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "intake_kind",
+            "intake_reference",
+            "intake_revision"
+          ],
+          "target": "routing_records",
+          "target_columns": [
+            "tenant_reference",
+            "kind",
+            "reference",
+            "revision"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "intake_reference",
+            "previous_sequence",
+            "previous_digest"
+          ],
+          "target": "routing_events",
+          "target_columns": [
+            "tenant_reference",
+            "intake_reference",
+            "sequence",
+            "content_digest"
+          ]
+        }
+      ]
+    },
+    "routing_evidence": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "kind": {
+          "type": "text",
+          "nullable": false
+        },
+        "record_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "record_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "content_digest": {
+          "type": "text",
+          "nullable": false
+        },
+        "grantor_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "policy_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "valid_from": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "expires_at": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "proof": {
+          "type": "jsonb",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "reference"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "grantor_reference"
+          ],
+          "target": "subjects",
+          "target_columns": [
+            "tenant_reference",
+            "subject_reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "kind",
+            "record_reference",
+            "record_revision",
+            "content_digest"
+          ],
+          "target": "routing_records",
+          "target_columns": [
+            "tenant_reference",
+            "kind",
+            "reference",
+            "revision",
+            "content_digest"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "policy_revision"
+          ],
+          "target": "policy_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "policy_revision"
+          ]
+        }
+      ]
+    },
+    "routing_heads": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "kind": {
+          "type": "text",
+          "nullable": false
+        },
+        "reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "kind",
+          "reference"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "kind",
+            "reference",
+            "revision"
+          ],
+          "target": "routing_records",
+          "target_columns": [
+            "tenant_reference",
+            "kind",
+            "reference",
+            "revision"
+          ]
+        }
+      ]
+    },
+    "routing_journey_heads": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "intake_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "sequence": {
+          "type": "int8",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "intake_reference"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "intake_reference",
+            "sequence"
+          ],
+          "target": "routing_events",
+          "target_columns": [
+            "tenant_reference",
+            "intake_reference",
+            "sequence"
+          ]
+        }
+      ]
+    },
+    "routing_links": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "packet_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "packet_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "packet_kind": {
+          "type": "text",
+          "nullable": false
+        },
+        "department_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "department_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "department_digest": {
+          "type": "text",
+          "nullable": false
+        },
+        "department_kind": {
+          "type": "text",
+          "nullable": false
+        },
+        "rule_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "rule_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "rule_digest": {
+          "type": "text",
+          "nullable": false
+        },
+        "rule_kind": {
+          "type": "text",
+          "nullable": false
+        },
+        "intake_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "intake_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "intake_kind": {
+          "type": "text",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "packet_reference",
+          "packet_revision"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "department_kind",
+            "department_reference",
+            "department_revision",
+            "department_digest"
+          ],
+          "target": "routing_records",
+          "target_columns": [
+            "tenant_reference",
+            "kind",
+            "reference",
+            "revision",
+            "content_digest"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "intake_kind",
+            "intake_reference",
+            "intake_revision"
+          ],
+          "target": "routing_records",
+          "target_columns": [
+            "tenant_reference",
+            "kind",
+            "reference",
+            "revision"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "packet_kind",
+            "packet_reference",
+            "packet_revision"
+          ],
+          "target": "routing_records",
+          "target_columns": [
+            "tenant_reference",
+            "kind",
+            "reference",
+            "revision"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "rule_kind",
+            "rule_reference",
+            "rule_revision",
+            "rule_digest"
+          ],
+          "target": "routing_records",
+          "target_columns": [
+            "tenant_reference",
+            "kind",
+            "reference",
+            "revision",
+            "content_digest"
+          ]
+        }
+      ]
+    },
+    "routing_names": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "name": {
+          "type": "text",
+          "nullable": false
+        },
+        "department_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "department_kind": {
+          "type": "text",
+          "nullable": false
+        },
+        "first_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "name"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "department_kind",
+            "department_reference",
+            "first_revision"
+          ],
+          "target": "routing_records",
+          "target_columns": [
+            "tenant_reference",
+            "kind",
+            "reference",
+            "revision"
+          ]
+        }
+      ]
+    },
+    "routing_receipts": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "operation": {
+          "type": "text",
+          "nullable": false
+        },
+        "key": {
+          "type": "text",
+          "nullable": false
+        },
+        "payload_digest": {
+          "type": "text",
+          "nullable": false
+        },
+        "result": {
+          "type": "jsonb",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "operation",
+          "key"
+        ]
+      ],
+      "foreign_keys": []
+    },
+    "routing_records": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "kind": {
+          "type": "text",
+          "nullable": false
+        },
+        "reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "previous_revision": {
+          "type": "int8",
+          "nullable": true
+        },
+        "content_digest": {
+          "type": "text",
+          "nullable": false
+        },
+        "payload": {
+          "type": "jsonb",
+          "nullable": false
+        },
+        "state": {
+          "type": "text",
+          "nullable": false
+        },
+        "actor_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "policy_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "created_at": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "kind",
+          "reference",
+          "revision"
+        ],
+        [
+          "tenant_reference",
+          "kind",
+          "reference",
+          "revision",
+          "content_digest"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "actor_reference"
+          ],
+          "target": "subjects",
+          "target_columns": [
+            "tenant_reference",
+            "subject_reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "kind",
+            "reference",
+            "previous_revision"
+          ],
+          "target": "routing_records",
+          "target_columns": [
+            "tenant_reference",
+            "kind",
+            "reference",
+            "revision"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "policy_revision"
+          ],
+          "target": "policy_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "policy_revision"
+          ]
+        }
+      ]
+    },
+    "routing_references": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "kind": {
+          "type": "text",
+          "nullable": false
+        },
+        "reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "parent_reference": {
+          "type": "text",
+          "nullable": true
+        },
+        "actor_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "policy_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "kind",
+          "reference"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "actor_reference"
+          ],
+          "target": "subjects",
+          "target_columns": [
+            "tenant_reference",
+            "subject_reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "policy_revision"
+          ],
+          "target": "policy_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "policy_revision"
+          ]
+        }
+      ]
+    },
+    "routing_revocations": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "actor_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "created_at": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "reference"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "actor_reference"
+          ],
+          "target": "subjects",
+          "target_columns": [
+            "tenant_reference",
+            "subject_reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "reference"
+          ],
+          "target": "routing_evidence",
+          "target_columns": [
+            "tenant_reference",
+            "reference"
+          ]
+        }
+      ]
+    },
+    "schema_migrations": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "migration_id": {
+          "type": "text",
+          "nullable": false
+        },
+        "checksum": {
+          "type": "text",
+          "nullable": false
+        },
+        "applied_at": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "migration_id"
+        ]
+      ],
+      "foreign_keys": []
+    },
+    "security_decisions": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "decision_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "subject_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "action": {
+          "type": "text",
+          "nullable": false
+        },
+        "resource_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "policy_revision": {
+          "type": "int8",
+          "nullable": false
+        },
+        "allowed": {
+          "type": "bool",
+          "nullable": false
+        },
+        "reason_code": {
+          "type": "text",
+          "nullable": false
+        },
+        "created_at": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "decision_reference"
+        ]
+      ],
+      "foreign_keys": []
+    },
+    "subjects": {
+      "columns": {
+        "tenant_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "subject_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "issuer_reference": {
+          "type": "text",
+          "nullable": false
+        },
+        "audience": {
+          "type": "text",
+          "nullable": false
+        },
+        "status": {
+          "type": "text",
+          "nullable": false
+        },
+        "dataset": {
+          "type": "text",
+          "nullable": false
+        }
+      },
+      "keys": [
+        [
+          "tenant_reference",
+          "subject_reference"
+        ]
+      ],
+      "foreign_keys": []
+    }
+  }
+}
