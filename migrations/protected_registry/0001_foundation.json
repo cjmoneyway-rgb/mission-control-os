@@ -1,0 +1,583 @@
+{
+  "migration_id": "protected_registry_0001",
+  "from_revision": 0,
+  "to_revision": 1,
+  "dataset": "synthetic",
+  "entities": [
+    {
+      "name": "schema_migrations",
+      "columns": {
+        "tenant_reference": "reference",
+        "migration_id": "reference",
+        "checksum": "digest",
+        "applied_at": "timestamp",
+        "dataset": "reference"
+      },
+      "primary_key": [
+        "tenant_reference",
+        "migration_id"
+      ],
+      "unique_keys": [],
+      "foreign_keys": [],
+      "rules": [
+        "tenant_isolation",
+        "synthetic_only",
+        "append_only"
+      ]
+    },
+    {
+      "name": "subjects",
+      "columns": {
+        "tenant_reference": "reference",
+        "subject_reference": "reference",
+        "issuer_reference": "reference",
+        "audience": "reference",
+        "status": "reference",
+        "dataset": "reference"
+      },
+      "primary_key": [
+        "tenant_reference",
+        "subject_reference"
+      ],
+      "unique_keys": [],
+      "foreign_keys": [],
+      "rules": [
+        "tenant_isolation",
+        "synthetic_only"
+      ]
+    },
+    {
+      "name": "policy_revisions",
+      "columns": {
+        "tenant_reference": "reference",
+        "policy_revision": "integer",
+        "content_digest": "digest",
+        "rules_document": "json",
+        "valid_from": "timestamp",
+        "expires_at": "timestamp",
+        "dataset": "reference"
+      },
+      "primary_key": [
+        "tenant_reference",
+        "policy_revision"
+      ],
+      "unique_keys": [],
+      "foreign_keys": [],
+      "rules": [
+        "tenant_isolation",
+        "synthetic_only",
+        "append_only",
+        "positive_revision",
+        "validity_interval"
+      ]
+    },
+    {
+      "name": "role_bindings",
+      "columns": {
+        "tenant_reference": "reference",
+        "binding_reference": "reference",
+        "subject_reference": "reference",
+        "role_reference": "reference",
+        "policy_revision": "integer",
+        "valid_from": "timestamp",
+        "expires_at": "timestamp",
+        "dataset": "reference"
+      },
+      "primary_key": [
+        "tenant_reference",
+        "binding_reference"
+      ],
+      "unique_keys": [],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "subject_reference"
+          ],
+          "target": "subjects",
+          "target_columns": [
+            "tenant_reference",
+            "subject_reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "policy_revision"
+          ],
+          "target": "policy_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "policy_revision"
+          ]
+        }
+      ],
+      "rules": [
+        "tenant_isolation",
+        "synthetic_only",
+        "validity_interval"
+      ]
+    },
+    {
+      "name": "registry_revisions",
+      "columns": {
+        "tenant_reference": "reference",
+        "record_reference": "reference",
+        "revision": "integer",
+        "previous_revision": "integer",
+        "state": "reference",
+        "payload": "json",
+        "content_digest": "digest",
+        "created_at": "timestamp",
+        "actor_reference": "reference",
+        "policy_revision": "integer",
+        "dataset": "reference",
+        "schema_revision": "integer"
+      },
+      "primary_key": [
+        "tenant_reference",
+        "record_reference",
+        "revision"
+      ],
+      "unique_keys": [],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "actor_reference"
+          ],
+          "target": "subjects",
+          "target_columns": [
+            "tenant_reference",
+            "subject_reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "policy_revision"
+          ],
+          "target": "policy_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "policy_revision"
+          ]
+        }
+      ],
+      "rules": [
+        "tenant_isolation",
+        "synthetic_only",
+        "append_only",
+        "positive_revision",
+        "inactive_only"
+      ]
+    },
+    {
+      "name": "registry_heads",
+      "columns": {
+        "tenant_reference": "reference",
+        "record_reference": "reference",
+        "revision": "integer",
+        "dataset": "reference"
+      },
+      "primary_key": [
+        "tenant_reference",
+        "record_reference"
+      ],
+      "unique_keys": [],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "record_reference",
+            "revision"
+          ],
+          "target": "registry_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "record_reference",
+            "revision"
+          ]
+        }
+      ],
+      "rules": [
+        "tenant_isolation",
+        "synthetic_only",
+        "compare_and_swap"
+      ]
+    },
+    {
+      "name": "approval_evidence",
+      "columns": {
+        "tenant_reference": "reference",
+        "evidence_reference": "reference",
+        "record_reference": "reference",
+        "record_revision": "integer",
+        "content_digest": "digest",
+        "grantor_reference": "reference",
+        "policy_revision": "integer",
+        "valid_from": "timestamp",
+        "expires_at": "timestamp",
+        "status": "reference",
+        "proof_reference": "reference",
+        "dataset": "reference"
+      },
+      "primary_key": [
+        "tenant_reference",
+        "evidence_reference"
+      ],
+      "unique_keys": [],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "record_reference",
+            "record_revision"
+          ],
+          "target": "registry_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "record_reference",
+            "revision"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "grantor_reference"
+          ],
+          "target": "subjects",
+          "target_columns": [
+            "tenant_reference",
+            "subject_reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "policy_revision"
+          ],
+          "target": "policy_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "policy_revision"
+          ]
+        }
+      ],
+      "rules": [
+        "tenant_isolation",
+        "synthetic_only",
+        "append_only",
+        "validity_interval"
+      ]
+    },
+    {
+      "name": "approval_revocations",
+      "columns": {
+        "tenant_reference": "reference",
+        "evidence_reference": "reference",
+        "revocation_reference": "reference",
+        "revoked_at": "timestamp",
+        "actor_reference": "reference",
+        "dataset": "reference"
+      },
+      "primary_key": [
+        "tenant_reference",
+        "revocation_reference"
+      ],
+      "unique_keys": [],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "evidence_reference"
+          ],
+          "target": "approval_evidence",
+          "target_columns": [
+            "tenant_reference",
+            "evidence_reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "actor_reference"
+          ],
+          "target": "subjects",
+          "target_columns": [
+            "tenant_reference",
+            "subject_reference"
+          ]
+        }
+      ],
+      "rules": [
+        "tenant_isolation",
+        "synthetic_only",
+        "append_only"
+      ]
+    },
+    {
+      "name": "packet_revisions",
+      "columns": {
+        "tenant_reference": "reference",
+        "packet_reference": "reference",
+        "revision": "integer",
+        "previous_revision": "integer",
+        "registry_reference": "reference",
+        "registry_revision": "integer",
+        "state": "reference",
+        "payload": "json",
+        "content_digest": "digest",
+        "created_at": "timestamp",
+        "actor_reference": "reference",
+        "policy_revision": "integer",
+        "dataset": "reference",
+        "schema_revision": "integer"
+      },
+      "primary_key": [
+        "tenant_reference",
+        "packet_reference",
+        "revision"
+      ],
+      "unique_keys": [],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "registry_reference",
+            "registry_revision"
+          ],
+          "target": "registry_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "record_reference",
+            "revision"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "actor_reference"
+          ],
+          "target": "subjects",
+          "target_columns": [
+            "tenant_reference",
+            "subject_reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "policy_revision"
+          ],
+          "target": "policy_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "policy_revision"
+          ]
+        }
+      ],
+      "rules": [
+        "tenant_isolation",
+        "synthetic_only",
+        "append_only",
+        "inactive_only",
+        "positive_revision"
+      ]
+    },
+    {
+      "name": "packet_heads",
+      "columns": {
+        "tenant_reference": "reference",
+        "packet_reference": "reference",
+        "revision": "integer",
+        "dataset": "reference"
+      },
+      "primary_key": [
+        "tenant_reference",
+        "packet_reference"
+      ],
+      "unique_keys": [],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "packet_reference",
+            "revision"
+          ],
+          "target": "packet_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "packet_reference",
+            "revision"
+          ]
+        }
+      ],
+      "rules": [
+        "tenant_isolation",
+        "synthetic_only",
+        "compare_and_swap"
+      ]
+    },
+    {
+      "name": "journey_events",
+      "columns": {
+        "tenant_reference": "reference",
+        "event_reference": "reference",
+        "journey_reference": "reference",
+        "sequence": "integer",
+        "packet_reference": "reference",
+        "packet_revision": "integer",
+        "previous_digest": "nullable_digest",
+        "content_digest": "digest",
+        "payload": "json",
+        "active": "boolean",
+        "created_at": "timestamp",
+        "actor_reference": "reference",
+        "policy_revision": "integer",
+        "dataset": "reference",
+        "schema_revision": "integer"
+      },
+      "primary_key": [
+        "tenant_reference",
+        "event_reference"
+      ],
+      "unique_keys": [
+        [
+          "tenant_reference",
+          "journey_reference",
+          "sequence"
+        ]
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "packet_reference",
+            "packet_revision"
+          ],
+          "target": "packet_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "packet_reference",
+            "revision"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "actor_reference"
+          ],
+          "target": "subjects",
+          "target_columns": [
+            "tenant_reference",
+            "subject_reference"
+          ]
+        },
+        {
+          "columns": [
+            "tenant_reference",
+            "policy_revision"
+          ],
+          "target": "policy_revisions",
+          "target_columns": [
+            "tenant_reference",
+            "policy_revision"
+          ]
+        }
+      ],
+      "rules": [
+        "tenant_isolation",
+        "synthetic_only",
+        "append_only",
+        "inactive_only",
+        "positive_revision"
+      ]
+    },
+    {
+      "name": "journey_heads",
+      "columns": {
+        "tenant_reference": "reference",
+        "journey_reference": "reference",
+        "sequence": "integer",
+        "dataset": "reference"
+      },
+      "primary_key": [
+        "tenant_reference",
+        "journey_reference"
+      ],
+      "unique_keys": [],
+      "foreign_keys": [
+        {
+          "columns": [
+            "tenant_reference",
+            "journey_reference",
+            "sequence"
+          ],
+          "target": "journey_events",
+          "target_columns": [
+            "tenant_reference",
+            "journey_reference",
+            "sequence"
+          ]
+        }
+      ],
+      "rules": [
+        "tenant_isolation",
+        "synthetic_only",
+        "compare_and_swap"
+      ]
+    },
+    {
+      "name": "idempotency_receipts",
+      "columns": {
+        "tenant_reference": "reference",
+        "operation_reference": "reference",
+        "idempotency_key": "reference",
+        "payload_digest": "digest",
+        "result_reference": "reference",
+        "result_revision": "integer",
+        "created_at": "timestamp",
+        "dataset": "reference"
+      },
+      "primary_key": [
+        "tenant_reference",
+        "operation_reference",
+        "idempotency_key"
+      ],
+      "unique_keys": [],
+      "foreign_keys": [],
+      "rules": [
+        "tenant_isolation",
+        "synthetic_only",
+        "append_only"
+      ]
+    },
+    {
+      "name": "security_decisions",
+      "columns": {
+        "tenant_reference": "reference",
+        "decision_reference": "reference",
+        "subject_reference": "reference",
+        "action": "reference",
+        "resource_reference": "reference",
+        "policy_revision": "integer",
+        "allowed": "boolean",
+        "reason_code": "reference",
+        "created_at": "timestamp",
+        "dataset": "reference"
+      },
+      "primary_key": [
+        "tenant_reference",
+        "decision_reference"
+      ],
+      "unique_keys": [],
+      "foreign_keys": [],
+      "rules": [
+        "tenant_isolation",
+        "synthetic_only",
+        "append_only"
+      ]
+    }
+  ]
+}
