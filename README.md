@@ -27,7 +27,7 @@ Mission Control OS™ organizes work through specialized executive and departmen
 3. Select the appropriate department or specialist.
 4. Execute inside a defined specialist context.
 5. Prepare a CEO Executive Summary.
-6. Preserve an execution record.
+6. Preserve minimized execution metadata when audit logging is enabled.
 7. Surface the next decision or action.
 
 Potential outputs include CEO Executive Summaries, leadership insights, Moneyway Journal™ executive articles, content-repurposing opportunities, relationship intelligence, follow-up recommendations, partnership opportunities, operational action plans, and searchable organizational knowledge.
@@ -43,7 +43,7 @@ Potential outputs include CEO Executive Summaries, leadership insights, Moneyway
 
 ## Primary demonstration
 
-The primary Build Week workflow shows how a podcast conversation can become enterprise intelligence. A source conversation can support:
+The Build Week narrative illustrates how a podcast conversation could support enterprise intelligence. The offline demo produces a deterministic routing and recommendation template; it does not process a real conversation or create the downstream assets listed below. The intended workflow could support:
 
 - A Moneyway Journal™ executive article
 - Podcast release materials
@@ -108,9 +108,9 @@ Human leadership and review
 
 - **ChatGPT / GPT-5.6:** Organizational reasoning and governance-development environment
 - **Codex:** Technical formalization, implementation support, documentation, and verification structure
-- **OpenAI API:** Classification and specialist-execution engine for the prototype
+- **OpenAI API:** Optional Responses API provider; transmission is denied without trusted authorization and sensitive-data clearance
 - **Python:** Prototype runtime
-- **JSONL:** Structured execution and audit-record format
+- **JSONL:** Minimized audit metadata; full successful records are available separately through CLI JSON output
 
 ## Capability status
 
@@ -127,10 +127,12 @@ Mission Control OS™ uses three evidence classifications:
 | Python prototype | **BUILT AND VERIFIED** |
 | Deterministic offline classification and specialist execution | **BUILT AND VERIFIED** |
 | OpenAI API classification and specialist execution | **BUILT — VALIDATION REQUIRED** |
-| Department routing and isolated specialist contexts | **BUILT AND VERIFIED** |
+| Department routing and department-scoped prompt contexts (offline behavior) | **BUILT AND VERIFIED** |
 | CEO Executive Summary generation | **BUILT AND VERIFIED** |
-| JSONL audit logging | **BUILT AND VERIFIED** |
-| Automated Governance Check and one revision cycle | **BUILT AND VERIFIED** |
+| Minimized JSONL audit metadata and non-destructive retention views | **BUILT AND VERIFIED** — local POSIX tests |
+| Technical Governance Check, one revision attempt, and blocked final rejection | **BUILT AND VERIFIED** — limited structural and secret-pattern checks |
+| Engine and OpenAI provider default-deny clearance | **BUILT AND VERIFIED** — synthetic tests; no live API validation |
+| Synthetic registry, approval, work-packet, and lifecycle contracts | **BUILT AND VERIFIED** — validation scaffolding; no operational registry or live lifecycle |
 | Automated HubSpot, Google Drive, and Google Sheets writeback | **ROADMAP — NOT OPERATIONAL** |
 | Full enterprise dashboard and cross-platform synchronization | **ROADMAP — NOT OPERATIONAL** |
 
@@ -150,25 +152,47 @@ Never commit:
 
 ```mermaid
 flowchart TD
-    A["CEO directive"] --> B["Classification router"]
-    B --> C["Configured department"]
-    C --> D["Isolated specialist execution"]
-    D --> E["Governance Check"]
-    E -->|Approved| F["CEO Executive Summary"]
-    E -->|Revision required| D
-    F --> G["JSONL audit record"]
+    A["Directive"] --> B["Classification router"]
+    B --> C["Configured demo department"]
+    C --> D["Department-scoped response"]
+    D --> E["Technical Governance Check"]
+    E -->|Pass| G["Record validated audit metadata if logging is enabled"]
+    E -->|Fail| R["One revision attempt"]
+    R --> E2["Final technical check"]
+    E2 -->|Pass| G
+    G --> F["Deliver response and CEO Executive Summary"]
+    E2 -->|Fail| H["Record blocked audit metadata if logging is enabled"]
+    H --> X["Block delivery; non-success CLI status"]
 ```
 
-The default `mock` provider executes this complete path deterministically, without
-network access or paid API calls. The optional `openai` provider uses the official
-OpenAI Python SDK and the Responses API for classification and specialist execution.
-The same deterministic Governance Check and audit layer apply to both providers.
+The default `mock` provider runs deterministically without network access or paid
+API calls. The engine requires authorization and sensitive-data clearance before
+each custom/injected provider classification, execution, and revision call. Only
+the exact internally constructed mock is exempt; injecting a mock object does not
+inherit that exemption. Missing, denied, malformed, or failing clearance blocks
+the call. The optional OpenAI provider also checks its exact outbound payload
+before calling the Responses API.
+
+Department-scoped contexts supply a selected mandate and, for the OpenAI provider,
+department-specific prompt instructions. They provide no process sandbox, separate
+security principal, or data-access isolation. The mock provider produces a fixed
+recommendation template using the selected department's public configuration.
+
+Technical governance checks look for required summary labels and two secret
+patterns. They do not verify factual accuracy, comprehensive confidentiality,
+brand compliance, or organizational permission. The `approved` status means only
+these technical checks passed. A failed final check blocks result delivery; it
+does not turn a rejected response into an approved result. Any configured audit
+write must succeed before delivery; audit I/O failures also block the CLI result.
 
 ## Requirements
 
 - Python 3.10 or newer
 - No API key for the offline demo or tests
-- An OpenAI API key only for optional live mode
+- A local POSIX filesystem with `flock`, atomic replacement, and directory-sync
+  support for audit logging and retention; unsupported platforms fail closed
+- Trusted programmatic authorization and sensitive-data clearance, plus an API
+  key, for any separately authorized live OpenAI use
 
 ## Installation
 
@@ -180,14 +204,16 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Windows PowerShell activation:
+Windows PowerShell activation (environment activation only; audit logging and
+retention require POSIX, so use `--no-log` for an offline CLI run on Windows):
 
 ```powershell
 .venv\Scripts\Activate.ps1
 ```
 
 The offline prototype itself uses only the Python standard library. Installing
-`requirements.txt` adds the official OpenAI SDK for optional live mode.
+`requirements.txt` adds the official OpenAI SDK for the optional gated provider;
+installing it does not enable live access.
 
 ## Run the judge demo — free and offline
 
@@ -219,73 +245,125 @@ python main.py --demo --no-log
 
 ## Phase 1A hardening
 
-See [security boundaries and unresolved decisions](docs/phase-1a-security.md).
-Technical governance validation does not grant organizational authorization.
-Final rejected output is blocked; default audit records contain metadata only.
-Registry and lifecycle contracts are synthetic foundations, not active workflows.
+These boundaries describe merged Phase 1A commit `cf4c28a`. See
+[security boundaries and unresolved decisions](docs/phase-1a-security.md) for the
+full public technical notes.
 
-## Optional live OpenAI mode
+### Minimized audit metadata and retention
 
-Live requests now require a trusted programmatic safety gate that explicitly clears
-authorization and sensitive-data review for every outbound payload. The CLI has no
-override and blocks live transmission. The historical shell example below only
-selects the provider; credentials alone cannot authorize a request.
+Default audit lines contain an opaque execution ID, timestamp, technical status,
+an authorization disclaimer, schema revision, revision count, and finding count.
+They omit directives, response text, rejected output, department projections, and
+provider-generated rationales. Route IDs require an explicit public/synthetic-only
+opt-in. Successful `--json` output still includes the full in-memory record,
+including the directive, department details, and response; audit minimization does
+not redact terminal output or downstream captures.
 
-Create an API key at the OpenAI Platform. Never paste it into source code or
-commit it to GitHub. Set it in your shell, then select the live provider:
+Audit appends and explicit retention share a stable POSIX lock. With a configured
+positive day count, `JsonlAuditLog.purge_expired()` atomically refreshes a separate
+`<source>.retained.jsonl` snapshot. Despite its historical name, it never deletes,
+rewrites, or reorders source audit records and does not reclaim storage. Retention
+is unconfigured by default; no enterprise deletion policy is implied. Legacy or
+unknown audit schemas require separate review and are refused by this operation.
+Existing legacy logs are not automatically sanitized or migrated.
 
-```bash
-export OPENAI_API_KEY="your_key_here"
-export OPENAI_MODEL="gpt-5.6"
-python main.py --demo --provider openai
-```
+### Synthetic registry and lifecycle contracts
 
-PowerShell:
+Registry validation binds approval to an exact record ID, revision, and content
+digest. A trusted verifier must resolve current, matching approval evidence and
+the referenced department, title, owner, and policy. Missing, unresolved, expired,
+or unverifiable evidence fails closed; changing a revision invalidates its prior
+approval. Technical validity alone grants no organizational authority.
 
-```powershell
-$env:OPENAI_API_KEY="your_key_here"
-$env:OPENAI_MODEL="gpt-5.6"
-python main.py --demo --provider openai
-```
+These are synthetic validation contracts, not an operational registry or an
+activation service. Work packets and lifecycle events must remain inactive.
+Journey history is append-only in memory, with invalid transitions and duplicate
+event IDs rejected; it has no durable storage or integration hooks. Confidential
+operational records require a protected data store and approved identity,
+permissions, and evidence authority before implementation. Those decisions remain
+unresolved; no real assignments or organizational records are supplied here.
 
-`.env.example` documents the supported variable names. This minimal CLI does
-not automatically load dotenv files, which prevents accidental secret loading;
-set variables through your shell or an approved secret manager.
+## Optional OpenAI provider — default-deny
+
+The Responses API implementation remains unverified against a live service.
+Credentials alone do not authorize transmission. The CLI exposes no clearance
+override, so selecting `--provider openai` cannot enable live execution, even when
+an API key is present. Live CLI mode is intentionally blocked in Phase 1A.
+
+Any separately authorized programmatic use must supply a trusted safety gate that
+explicitly clears both authorization and sensitive-data review for every provider
+call and outbound OpenAI payload. Do not copy the always-allow synthetic test
+fixtures into production. Callbacks and evidence verifiers are trusted application
+dependencies; these checks do not sandbox arbitrary Python code.
+
+`.env.example` documents `OPENAI_API_KEY` and the optional `OPENAI_MODEL`. The CLI
+does not automatically load dotenv files. Any authorized credentials must be
+supplied securely and kept out of source, logs, and public documentation. No live
+API call or external integration is enabled by these instructions.
 
 ## Testing
 
-All automated tests use the deterministic mock provider and make zero API calls:
+The merged Phase 1A suite contains **37 offline tests**, verified on Linux/POSIX.
+Tests use deterministic mocks, synthetic provider and approval fixtures, and a
+fake OpenAI SDK. They make no live API calls and require no real credentials:
 
 ```bash
 python -m unittest discover -s tests -v
 ```
 
-The suite verifies routing, fallback behavior, Governance Check enforcement,
-secret-pattern rejection, JSONL audit logging, CLI execution, and input validation.
+The suite covers routing and fallback, blocked final governance, CLI rejection,
+strict confidence and provider-result validation, duplicate JSON keys, exact-revision
+approval and evidence failures, injected-provider bypass attempts, minimized audit
+metadata, concurrent append/retention, retention failures and process interruption,
+restrictive file modes, invalid lifecycle transitions, and duplicate event IDs.
+Passing these tests does not authorize external processing or operational routing.
 
 ## Repository map
 
 ```text
 mission-control-os/
-├── main.py                         # CLI application entry point
+├── main.py                         # CLI; blocks rejected delivery
+├── requirements.txt                # Optional OpenAI SDK dependency
+├── requirements-dev.txt            # Development dependency entry point
+├── .env.example                    # Variable names; no real credentials
 ├── mission_control/
-│   ├── engine.py                   # Route → execute → review → revise → log
-│   ├── providers.py                # Mock and OpenAI Responses API providers
-│   ├── governance.py               # Deterministic review rules
-│   ├── audit.py                    # Append-only JSONL execution records
-│   ├── config.py                   # Department configuration loader
-│   ├── models.py                   # Typed workflow data contracts
-│   └── departments.json            # Governed specialist definitions
-├── examples/sample_request.txt     # Approved demonstration directive
-└── tests/                           # Offline unit and CLI tests
+│   ├── __init__.py                 # Public package entry point
+│   ├── engine.py                   # Provider clearance, routing, review, delivery
+│   ├── providers.py                # Offline mock and gated OpenAI provider
+│   ├── governance.py               # Limited technical output checks
+│   ├── audit.py                    # Metadata log and non-destructive retention view
+│   ├── config.py                   # Validated public department projections
+│   ├── models.py                   # Execution and routing data contracts
+│   ├── contracts.py                # Synthetic registry, approval, and lifecycle
+│   ├── json_io.py                  # Strict JSON; rejects duplicate keys
+│   └── departments.json            # Public demo catalog; not a private registry
+├── docs/
+│   └── phase-1a-security.md         # Boundaries, limitations, unresolved decisions
+├── examples/
+│   └── sample_request.txt          # Public demonstration directive
+└── tests/
+    ├── __init__.py
+    ├── test_cli.py                 # Offline CLI checks
+    ├── test_engine.py              # Routing, review, and audit behavior
+    ├── test_openai_provider.py     # Fake SDK contract; no live API validation
+    ├── test_hardening.py           # Phase 1A fail-closed regressions
+    ├── test_precommit_corrections.py # Concurrency, evidence, parsing, provider gates
+    └── hardening_support.py        # Synthetic test authorities and clearance
 ```
 
 ## Current verification boundary
 
-The offline end-to-end prototype is implemented and testable. Live OpenAI mode
-is implemented against the Responses API but remains **BUILT — VALIDATION REQUIRED**
-until it is run with a user-provided API key. External CRM/Drive/Sheets writeback
-and the unified dashboard remain **ROADMAP — NOT OPERATIONAL**.
+The offline CLI and synthetic security contracts are verified within the 37-test
+Linux/POSIX suite. Technical checks, department-scoped prompts, and in-memory
+journey history do not establish enterprise authorization, data isolation,
+factual correctness, or durable organizational memory.
+
+Live OpenAI execution remains **BUILT — VALIDATION REQUIRED** and default-deny;
+an API key alone does not change that boundary. No operational approval authority,
+confidential registry, production lifecycle routing, or guest pilot is activated.
+External CRM/Drive/Sheets writeback and the unified dashboard remain
+**ROADMAP — NOT OPERATIONAL**. Phase 1B and live integrations require separate
+authorization; this documentation does not begin them.
 
 ## What we learned
 
