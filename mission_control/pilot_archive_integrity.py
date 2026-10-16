@@ -92,7 +92,14 @@ def validate_extended_history(payload,custody):
                 (intake.event_id,intake.original_classification,department.executive_reference,(department.department_id,),
                  department.revision,department.content_digest,rule.rule_id,rule.revision,rule.content_digest,rule.required_action,
                  rule.approval_reference,rule.visibility_references))
+        require((link['department_digest'],link['rule_digest'])==(department.content_digest,rule.content_digest))
         require((department.department_id,department.revision,department.content_digest,department.executive_reference) in rule.recipients)
+        for typ,values in (('classification',(packet.current_classification,)),
+                           ('outcome',packet.outcome_references),('handoff',packet.handoff_references)):
+            for value in values: require((typ,value) in refs)
+        pilot_packet=key[1]==1 and any(row['packet_reference']==packet.packet_id for row in tables['pilot_packet_links'])
+        if not pilot_packet:
+            for value in packet.dependencies: require(('dependency',value) in refs)
         historical_approval(tables,department,'department');historical_approval(tables,rule,'rule')
     for row in tables['routing_evidence']:
         key=(row['kind'],row['record_reference'],row['record_revision']);record=records[key]
@@ -113,6 +120,8 @@ def validate_extended_history(payload,custody):
     require({row['intake_reference']:row['sequence'] for row in tables['routing_journey_heads']}=={key:row['sequence'] for key,row in routing_events.items()})
     pilot_context=_validate_pilot(payload,custody,records,refs)
     _validate_receipts(tables,records,pilot_context)
+    _reconcile_journal(tables,records,pilot_context)
+    _reconcile_baseline_receipts(tables)
 
 
 def _validate_pilot(payload,custody,records,refs):
@@ -122,6 +131,7 @@ def _validate_pilot(payload,custody,records,refs):
         journey=decode_pilot('journey',row['payload']);intake=records[('intake',row['intake_reference'],1)]
         require((journey.journey_id,journey.tenant_reference,journey.intake_reference,journey.original_classification,journey.content_digest)==
                 (row['reference'],tenant,intake.event_id,intake.original_classification,row['content_digest']))
+        require(row['original_classification']==journey.original_classification)
         journeys[journey.journey_id]=journey
     for row in tables['pilot_proposals']:
         event=decode_pilot('event',row['payload'])
@@ -165,14 +175,21 @@ def _validate_pilot(payload,custody,records,refs):
         disposition='blocked' if missing else 'accepted'
         require(row['disposition']==disposition)
         data=row['payload']
+        require(set(data)=={'tenant_reference','journey_reference','event_reference','proposal_revision','event_digest',
+                           'sequence','previous_digest','original_classification','stage_index','disposition',
+                           'decision_reference','actor_reference','policy_revision','result'})
         require(row['content_digest']==fingerprint(data))
         for field in ('journey_reference','sequence','event_reference','proposal_revision','event_digest','previous_digest','original_classification','stage_index','disposition'):
-            require(data[field]==row[field])
+            require(fingerprint(data[field])==fingerprint(row[field]))
         require(row['event_digest']==proposal.content_digest and row['original_classification']==journey.original_classification and data['tenant_reference']==tenant)
         decision=decisions[key];body=decision['payload']
+        require(set(body)=={'reference','journey_reference','event_reference','classification','rule_reference',
+                           'rule_revision','rule_digest','approval_reference','proposal_revision','event_digest',
+                           'disposition','reason_reference','missing_dependencies','packet_references','state'})
+        require(decision['reference']=='syn-decision-'+fingerprint(list(key)))
         require(decision['content_digest']==fingerprint(body))
         for field in ('journey_reference','event_reference','reference','classification','rule_reference','rule_revision','rule_digest','approval_reference','proposal_revision','event_digest','disposition','reason_reference','state'):
-            require(body[field]==decision[field])
+            require(fingerprint(body[field])==fingerprint(decision[field]))
         require((decision['classification'],decision['rule_reference'],decision['rule_revision'],decision['rule_digest'],decision['approval_reference'],decision['proposal_revision'],decision['event_digest'],decision['disposition'])==
                 (classify_event(proposal),rule.rule_id,rule.revision,rule.content_digest,proposal.approval_reference,proposal.revision,proposal.content_digest,disposition))
         require(body['missing_dependencies']==list(missing) and decision['reason_reference']==('syn-missing-dependencies' if missing else 'syn-validated'))
@@ -180,7 +197,7 @@ def _validate_pilot(payload,custody,records,refs):
         require(set(packet_ids)==set(body['packet_references']) and len(packet_ids)==len(body['packet_references']))
         require(data['decision_reference']==decision['reference'])
         result=data['result']
-        require(result==dict(journey_reference=journey.journey_id,event_reference=proposal.event_id,version=row['sequence'],status=disposition,packet_references=body['packet_references'],state='inactive'))
+        require(fingerprint(result)==fingerprint(dict(journey_reference=journey.journey_id,event_reference=proposal.event_id,version=row['sequence'],status=disposition,packet_references=body['packet_references'],state='inactive')))
         if missing: require(not packet_ids)
         else:
             require(bool(packet_ids))
@@ -209,6 +226,16 @@ def _validate_receipts(tables,records,pilot):
     advanced=set();started=set();proposed=set()
     for row in tables['routing_receipts']:
         operation,key,result=row['operation'],row['key'],row['result']
+        if operation in ('syn-route','syn-packet-revision','syn-distribute','syn-pilot-start','syn-pilot-propose'):
+            require(isinstance(result,list))
+            if operation=='syn-route': require(bool(result) and all(isinstance(value,str) for value in result))
+            elif operation=='syn-pilot-start': require(len(result)==1 and isinstance(result[0],str))
+            elif operation=='syn-pilot-propose':
+                require(len(result)==3 and all(isinstance(value,str) for value in result[:2]) and type(result[2]) is int and result[2]>0)
+            else:
+                require(len(result)==(3 if operation=='syn-distribute' else 2) and isinstance(result[0],str)
+                        and type(result[1]) is int and result[1]>0)
+                if operation=='syn-distribute': require(isinstance(result[2],str))
         if operation=='syn-route':
             packets=[records[('packet',reference,1)] for reference in result]
             require(bool(packets))
@@ -228,8 +255,135 @@ def _validate_receipts(tables,records,pilot):
             proposal=proposals[tuple(result)];proposed.add(tuple(result));digest=proposal.content_digest
         elif operation=='syn-pilot-advance':
             proposal,event,expected=context[(result['journey_reference'],result['event_reference'])]
-            require(result==expected);advanced.add((result['journey_reference'],result['event_reference']))
+            require(fingerprint(result)==fingerprint(expected));advanced.add((result['journey_reference'],result['event_reference']))
             digest=fingerprint([proposal.content_digest,event['sequence']-1])
         else: raise ValueError('Unknown extended receipt operation')
         require(digest==row['payload_digest'])
     require(started==set(journeys) and proposed==set(proposals) and advanced==set(context))
+
+
+def _reconcile_journal(tables,records,pilot):
+    """Require the journal implied by the retained graph, not merely a valid prefix.
+
+    Table arrays are unordered sets. Journal sequence, atomic operation batches,
+    lifecycle order and packet revision order are material and cannot be resealed
+    into a different history. Receipt keys themselves need not be chronological.
+    """
+    from collections import defaultdict, deque
+    journeys,proposals,context=pilot
+    policies={row['policy_revision'] for row in tables['policy_revisions']}
+    subjects={row['subject_reference'] for row in tables['subjects']}
+    record_rows={(row['kind'],row['reference'],row['revision']):row for row in tables['routing_records']}
+    journey_rows={row['reference']:row for row in tables['pilot_journeys']}
+    journal=defaultdict(deque)
+    fields={'tenant_reference','source_event_reference','original_classification','sequence','previous_digest',
+            'event','reference','revision','actor_reference','policy_revision','details'}
+
+    def descriptor(intake,event,reference,revision,details,actor,policy):
+        return fingerprint([intake,event,reference,revision,details,actor,policy])
+
+    for row in sorted(tables['routing_events'],key=lambda row:(row['intake_reference'],row['sequence'])):
+        body=row['payload']
+        require(set(body)==fields and type(body['revision']) is int and body['revision']>0)
+        require(type(body['policy_revision']) is int and body['policy_revision'] in policies and body['actor_reference'] in subjects)
+        require(row['intake_kind']=='intake' and row['intake_revision']==1)
+        journal[descriptor(row['intake_reference'],body['event'],body['reference'],body['revision'],
+                           body['details'],body['actor_reference'],body['policy_revision'])].append(row['sequence'])
+
+    def group(intake,items,metadata):
+        positions=[]
+        for event,reference,revision,details in items:
+            key=descriptor(intake,event,reference,revision,details,metadata['actor_reference'],metadata['policy_revision'])
+            require(bool(journal[key]));positions.append(journal[key].popleft())
+        require(positions==list(range(positions[0],positions[0]+len(positions))))
+        return positions
+
+    seen=set();covered_intakes=set();covered_packets=set();starts={};advances={};packet_positions={};visibility=[]
+    refs={(row['kind'],row['reference']):row for row in tables['routing_references']}
+    for receipt in tables['routing_receipts']:
+        operation,result=receipt['operation'],receipt['result']
+        # Replays produce no additional receipts, except explicit visibility
+        # requests with distinct keys, which legitimately append distinct events.
+        if operation!='syn-distribute':
+            identity=(operation,fingerprint(result));require(identity not in seen);seen.add(identity)
+        if operation=='syn-pilot-propose': continue
+        if operation=='syn-pilot-start':
+            require(isinstance(result,list) and len(result)==1)
+            journey=journeys[result[0]];intake=journey.intake_reference
+            require(all(record_rows[('intake',intake,1)][field]==journey_rows[journey.journey_id][field]
+                        for field in ('actor_reference','policy_revision')))
+            positions=group(intake,[('syn-pilot-entry',journey.journey_id,1,{})],journey_rows[journey.journey_id])
+            starts[journey.journey_id]=positions[0];covered_intakes.add(intake)
+            require(positions[0]==1)
+        elif operation=='syn-pilot-advance':
+            key=(result['journey_reference'],result['event_reference']);proposal,event,_=context[key]
+            intake=journeys[key[0]].intake_reference;metadata=event['payload']
+            decision=next(row for row in tables['pilot_decisions'] if (row['journey_reference'],row['event_reference'])==key)
+            items=[('syn-pilot-classified',key[1],proposal.revision,
+                    {'decision_reference':decision['reference'],'status':event['disposition']})]
+            for reference in result['packet_references']:
+                items.append(('syn-pilot-packet',reference,1,{'event_reference':key[1]}))
+                packet_row=record_rows[('packet',reference,1)]
+                require(all(packet_row[field]==metadata[field] for field in ('actor_reference','policy_revision')))
+                require(records[('packet',reference,1)].idempotency_reference==receipt['key'])
+            positions=group(intake,items,metadata);advances[key]=positions
+            for reference,position in zip(result['packet_references'],positions[1:]):
+                require((reference,1) not in covered_packets);covered_packets.add((reference,1));packet_positions[(reference,1)]=position
+        elif operation=='syn-route':
+            require(isinstance(result,list) and bool(result))
+            first=records[('packet',result[0],1)];intake=first.source_event_reference
+            require(intake not in covered_intakes);covered_intakes.add(intake)
+            metadata=record_rows[('intake',intake,1)]
+            items=[('syn-intake',intake,1,{})]+[('syn-packet-proposed',reference,1,{}) for reference in result]
+            positions=group(intake,items,metadata);require(positions[0]==1)
+            for reference,position in zip(result,positions[1:]):
+                require((reference,1) not in covered_packets);covered_packets.add((reference,1));packet_positions[(reference,1)]=position
+                require(all(record_rows[('packet',reference,1)][field]==metadata[field] for field in ('actor_reference','policy_revision')))
+        elif operation=='syn-packet-revision':
+            require(isinstance(result,list) and len(result)==2 and type(result[1]) is int and result[1]>1)
+            reference,revision=result;packet=records[('packet',reference,revision)]
+            position=group(packet.source_event_reference,[('syn-packet-revised',reference,revision,{})],record_rows[('packet',reference,revision)])[0]
+            require((reference,revision) not in covered_packets);covered_packets.add((reference,revision));packet_positions[(reference,revision)]=position
+        elif operation=='syn-distribute':
+            require(isinstance(result,list) and len(result)==3 and type(result[1]) is int)
+            reference,revision,team=result;packet=records[('packet',reference,revision)]
+            department=records[('department',packet.recipient_references[0],packet.registry_revision)]
+            require(team in department.team_references and refs[('team',team)]['parent_reference']==department.executive_reference)
+            actor=refs[('executive',department.executive_reference)]['parent_reference']
+            # Visibility journal records do not have a separate metadata row.
+            candidates=[row for row in tables['routing_events'] if row['intake_reference']==packet.source_event_reference
+                        and row['payload']['event']=='syn-team-visibility' and row['payload']['reference']==reference
+                        and row['payload']['revision']==revision and row['payload']['details']=={'team_reference':team}
+                        and row['payload']['actor_reference']==actor]
+            positions=[]
+            for row in sorted(candidates,key=lambda row:row['sequence']):
+                body=row['payload'];key=descriptor(packet.source_event_reference,'syn-team-visibility',reference,revision,body['details'],actor,body['policy_revision'])
+                if journal[key]: positions=[journal[key].popleft()];break
+            require(bool(positions));visibility.append(((reference,revision),positions[0]))
+        else: raise ValueError('Unknown journal operation')
+    require(not any(journal.values()))
+    require(covered_intakes=={reference for kind,reference,revision in records if kind=='intake'})
+    require(covered_packets=={(reference,revision) for kind,reference,revision in records if kind=='packet'})
+    for journey in journeys:
+        previous=starts[journey]
+        for key,(_,event,_) in sorted(context.items(),key=lambda item:item[1][1]['sequence']):
+            if key[0]!=journey: continue
+            positions=advances[key];require(positions[0]>previous);previous=positions[-1]
+    for (reference,revision),position in packet_positions.items():
+        if revision>1: require(position>packet_positions[(reference,revision-1)])
+    for key,position in visibility: require(position>packet_positions[key])
+
+
+
+def _reconcile_baseline_receipts(tables):
+    # The complete archive includes the original foundation as well as the pilot.
+    # Baseline validation checks receipt -> result; require result -> receipt too.
+    expected=set()
+    for table,operation,reference,revision in (
+            ('registry_revisions','registry.append_draft','record_reference','revision'),
+            ('packet_revisions','packet.append_inactive','packet_reference','revision'),
+            ('journey_events','journey.append_inactive','journey_reference','sequence')):
+        expected.update((operation,row[reference],row[revision]) for row in tables[table])
+    actual=[(row['operation_reference'],row['result_reference'],row['result_revision'])
+            for row in tables['idempotency_receipts']]
+    require(len(actual)==len(set(actual)) and set(actual)==expected)

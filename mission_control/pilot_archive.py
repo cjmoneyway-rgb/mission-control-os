@@ -1,4 +1,5 @@
 """Complete tenant-scoped synthetic snapshot; no production backup/key service."""
+from copy import deepcopy
 from datetime import datetime
 import os
 from pathlib import Path
@@ -18,7 +19,17 @@ INSERT_ORDER=(*ENTITIES,'routing_records','routing_heads','routing_names','routi
               'routing_evidence','routing_revocations','routing_events','routing_journey_heads','routing_receipts',
               'pilot_journeys','pilot_proposals','pilot_proposal_heads','pilot_evidence','pilot_revocations','pilot_events',
               'pilot_heads','pilot_decisions','pilot_packet_links','pilot_deliverables')
-assert set(INSERT_ORDER)==set(TABLES) and len(INSERT_ORDER)==len(TABLES)
+
+
+def _validate_manifest():
+    # Inventory is independent of the loaded manifest: even empty tables are required.
+    if (MANIFEST.get('format')!='syn-pilot-schema-v1' or len(INSERT_ORDER)!=34
+            or len(set(INSERT_ORDER))!=34 or set(TABLES)!=set(INSERT_ORDER)
+            or MANIFEST.get('tables')!=TABLES):
+        raise ValueError('Incomplete reviewed archive manifest')
+
+
+_validate_manifest()
 
 
 def migration_checksums():
@@ -27,6 +38,7 @@ def migration_checksums():
 
 
 def schema_descriptor(connection):
+    _validate_manifest()
     relations,_=_query(connection,"SELECT c.relname AS name,c.relrowsecurity AS rls,c.relforcerowsecurity AS forced FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='mc_syn' AND c.relkind IN ('r','p','v','m','f','S')")
     if {row['name'] for row in relations}!=set(TABLES) or any(not row['rls'] or not row['forced'] for row in relations):
         raise ValueError('Incomplete, unknown or unprotected synthetic schema')
@@ -55,9 +67,10 @@ def _provenance(connection):
 
 
 def _validate_structure(payload):
-    if set(payload)!={'format','dataset','tenant','manifest_digest','migrations','tables','table_digests'}:
+    _validate_manifest()
+    if set(payload)!={'format','dataset','tenant','manifest_digest','migrations','tables','table_digests','table_counts'}:
         raise ValueError('Unknown complete archive fields')
-    if payload['format']!='syn-pilot-export-v1' or payload['dataset']!='synthetic' or payload['manifest_digest']!=fingerprint(MANIFEST):
+    if payload['format']!='syn-pilot-export-v2' or payload['dataset']!='synthetic' or payload['manifest_digest']!=fingerprint(MANIFEST):
         raise ValueError('Complete archive scope mismatch')
     from .department_routing import ref
     ref(payload['tenant'])
@@ -68,12 +81,22 @@ def _validate_structure(payload):
     for row in payload['migrations']:
         if datetime.fromisoformat(row['applied_at']).tzinfo is None: raise ValueError('Missing provenance timezone')
     tables=payload['tables']
-    if not isinstance(tables,dict) or set(tables)!=set(TABLES) or set(payload['table_digests'])!=set(TABLES):
+    if not isinstance(tables,dict) or set(tables)!=set(TABLES) or set(payload['table_digests'])!=set(TABLES) or set(payload['table_counts'])!=set(TABLES):
         raise ValueError('Complete archive must cover every reviewed table')
+    fixed_columns={
+        'routing_names':{'department_kind':'department'},
+        'routing_links':{'packet_kind':'packet','department_kind':'department','rule_kind':'rule','intake_kind':'intake','intake_revision':1},
+        'routing_events':{'intake_kind':'intake','intake_revision':1},
+        'pilot_journeys':{'intake_kind':'intake','intake_revision':1},
+        'pilot_decisions':{'rule_kind':'rule'},
+        'pilot_packet_links':{'packet_kind':'packet','packet_revision':1},
+    }
     indices={}
     for name,schema in TABLES.items():
         rows=tables[name]
-        if not isinstance(rows,list) or fingerprint(rows)!=payload['table_digests'][name]: raise ValueError('Archive table digest mismatch')
+        if (not isinstance(rows,list) or type(payload['table_counts'][name]) is not int
+                or payload['table_counts'][name]!=len(rows) or fingerprint(rows)!=payload['table_digests'][name]):
+            raise ValueError('Archive table count or digest mismatch')
         for row in rows:
             if not isinstance(row,dict) or set(row)!=set(schema['columns']): raise ValueError('Archive row column mismatch')
             if row['tenant_reference']!=payload['tenant'] or row['dataset']!='synthetic': raise ValueError('Cross-tenant or operational archive row')
@@ -92,6 +115,8 @@ def _validate_structure(payload):
                 elif kind=='jsonb':
                     if not isinstance(value,(dict,list)): raise ValueError('Invalid archive JSON structure')
                 else: raise ValueError('Unknown archive SQL type')
+            if any(row[column]!=expected for column,expected in fixed_columns.get(name,{}).items()):
+                raise ValueError('Archive reference kind or fixed revision mismatch')
             allowed_states=('draft','inactive') if name in ENTITIES else ('inactive',)
             if 'state' in row and row['state'] not in allowed_states: raise ValueError('Operational or unsupported state forbidden')
             if 'active' in row and row['active'] is not False: raise ValueError('Operational event forbidden')
@@ -132,12 +157,31 @@ def export_complete_snapshot(tx,custody):
         raise PermissionError('Trusted synthetic archive custody required')
     schema_descriptor(tx.connection)
     provenance=_provenance(tx.connection)
-    tables={name:sorted([canonical(row) for row in _query(tx.connection,'SELECT * FROM mc_syn.'+name+' WHERE tenant_reference=%s',(tx.tenant,))[0]],key=canonical_bytes) for name in TABLES}
-    payload={'format':'syn-pilot-export-v1','dataset':'synthetic','tenant':tx.tenant,'manifest_digest':fingerprint(MANIFEST),
-             'migrations':provenance,'tables':tables,'table_digests':{name:fingerprint(rows) for name,rows in tables.items()}}
+    tables=_capture_tables(tx)
+    payload={'format':'syn-pilot-export-v2','dataset':'synthetic','tenant':tx.tenant,'manifest_digest':fingerprint(MANIFEST),
+             'migrations':provenance,'tables':tables,'table_digests':{name:fingerprint(rows) for name,rows in tables.items()},
+             'table_counts':{name:len(rows) for name,rows in tables.items()}}
     archive={'payload':payload,'checksum':fingerprint(payload),'proof':custody.seal(payload)}
     validate_complete_archive(archive,custody)
     return archive
+
+
+def _capture_tables(tx):
+    return {name:sorted([canonical(row) for row in _query(tx.connection,
+            'SELECT * FROM mc_syn.'+name+' WHERE tenant_reference=%s',(tx.tenant,))[0]],key=canonical_bytes)
+            for name in TABLES}
+
+
+def _verify_restored_tables(tx,payload,custody):
+    # Read the actual inserted graph, not the caller's archive, before publication.
+    actual=_capture_tables(tx)
+    expected={name:sorted(rows,key=canonical_bytes) for name,rows in payload['tables'].items()}
+    if actual!=expected: raise ValueError('Restored synthetic snapshot differs from verified source')
+    from .pilot_archive_integrity import validate_extended_history
+    validate_extended_history({**payload,'tables':actual},custody)
+    # Force deferred constraints inside the same transaction; commit failures also
+    # propagate through the store context manager's complete rollback boundary.
+    _query(tx.connection,'SET CONSTRAINTS ALL IMMEDIATE')
 
 
 def _restore_row(tx,name,row):
@@ -155,7 +199,8 @@ def json_value(value):
 @transactional_operation
 def restore_complete_snapshot(tx,archive,custody):
     actor,_=tx._auth('backup.restore','syn-backup',context=False)
-    payload=validate_complete_archive(archive,custody)
+    # Detach the verified snapshot from mutable caller-owned objects.
+    payload=validate_complete_archive(deepcopy(archive),custody)
     if payload['tenant']!=tx.tenant: raise PermissionError('Cross-tenant complete restore forbidden')
     schema_descriptor(tx.connection);_provenance(tx.connection)
     if any(_query(tx.connection,'SELECT 1 FROM mc_syn.'+name+' WHERE tenant_reference=%s LIMIT 1',(tx.tenant,))[0] for name in TABLES):
@@ -168,7 +213,8 @@ def restore_complete_snapshot(tx,archive,custody):
         elif name=='pilot_events': rows=sorted(rows,key=lambda row:(row['journey_reference'],row['sequence']))
         elif name in ('registry_revisions','packet_revisions'): rows=sorted(rows,key=lambda row:row['revision'])
         elif name=='journey_events': rows=sorted(rows,key=lambda row:row['sequence'])
-        for row in rows: _restore_row(tx,name,row)
+        for row in rows: _restore_row(tx,name,deepcopy(row))
+    _verify_restored_tables(tx,payload,custody)
     tx._auth('backup.restore','syn-backup')
     # All source audit records are preserved; this is one additional restore decision.
     tx._audit('backup.restore','syn-backup',actor)

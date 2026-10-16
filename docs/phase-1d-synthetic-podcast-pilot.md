@@ -139,19 +139,51 @@ the synthetic runtime grant. It cannot write data, read directives or bypass ten
 record access. Shared schema-ledger metadata is provenance, not tenant data.
 
 The archive binds exact format, dataset, tenant, manifest digest, migration provenance,
-per-table digests, complete table inventory, overall checksum and ephemeral synthetic
+per-table row counts and digests, complete table inventory, overall checksum and ephemeral synthetic
 custody proof. Verification checks schema/type/key/FK completeness, nested contracts,
 revision/head continuity, permanent name claims, approvals/signatures, source links,
 deterministic routing results, hash chains, blocked/accepted progression, receipts,
 and exact packet/outcome/handoff completeness. Historical expired/revoked proofs are
 preserved and verified as historical signatures, not authorized for current reuse.
 
+The correction to the initial Phase 1D implementation reconciles journal entries
+against the retained journeys, lifecycle decisions, packets, revisions, receipts and
+inactive team visibility. Empty journals and internally consistent prefixes are
+rejected when those records require omitted entries. Each required operation batch
+must occur exactly once and contiguously, with lifecycle and packet revision order
+preserved. Unknown/orphan journal operations and duplicate operation receipts fail
+closed. Foreign keys and nested references cover approval, rule, department,
+visibility, handoff, outcome and idempotency relationships. Archive table-array order
+is immaterial; journal sequences, linked predecessors and recipient order are not.
+
+All 34 table names must occur in the data, signed count inventory and digest inventory,
+including empty tables. Counts, keys, revisions, references and content must agree.
+Complete format `syn-pilot-export-v2` requires signed counts. Pre-correction
+complete v1 archives are rejected; re-export from
+the synthetic source rather than silently upgrading an old archive. This does not
+alter the older baseline-format rejection for extended databases.
+
+These checks establish completeness relative to the retained, signed graph. They
+cannot detect coordinated removal of an entire independent history by an actor
+with signing custody, or establish records that were never captured. Independent
+historical checkpoints remain a separate production requirement. A successful
+round-trip preserves every captured tenant row; the only added row is a minimized
+restore audit decision. Migration application timestamps belong to the destination
+ledger. An uncertain connection outcome after a server has actually committed
+requires reconciliation; rollback is not a claim to undo an already committed
+transaction.
+
 Restore requires separate migration/restore authority and a completely empty tenant
 in a separately initialized disposable database with matching schema/migration hashes.
 Unknown schema drift, changed content, incomplete tables or links, cross-tenant data,
 wrong or untrusted signing custody, nonempty targets and invalid graphs are rejected.
-Untrusted custody objects are rejected before any signing callback is invoked. Dependency-
-ordered insertion and deferred SQL checks occur in one transaction. All source audit
+Untrusted custody objects are rejected before any signing callback is invoked. The archive is detached from caller-owned mutable data before validation. Dependency-
+ordered insertion, a fresh database read of all 34 tables, exact source-row comparison,
+semantic reconciliation and forced deferred SQL checks occur in one SERIALIZABLE
+transaction. No row is inserted until preflight passes. Preflight, insertion,
+reconciliation, integrity and database commit failures abort the transaction; a
+caught operation error also prevents commit. Nonempty tenants are never merged or
+overwritten, and other tenants and the shared migration ledger remain unchanged. All source audit
 records survive; restore adds one minimized audit decision. The destination's own
 shared migration timestamps remain authoritative and are not overwritten; source
 migration timestamps stay in the signed archive provenance. Restoration does not
@@ -177,9 +209,10 @@ Existing native Node.js 24 official pins are unchanged:
 - setup-python v6.1.0: `83679a892e2d95755f2dac6acb0bfd1e9ac5d548`
 - PostgreSQL image: `postgres:17.11-bookworm@sha256:3645570cccdfa447589da9f57dd740faa29b30938e861289a5574b6ca6b03826`
 
-The verification runner requires **227 tests**, including **102 PostgreSQL tests**:
-all 159 existing tests, 19 new unit tests, 33 lifecycle PostgreSQL tests and 16 archive
-PostgreSQL tests. Missing groups, skips, failures, errors, expected failures or
+The verification runner requires **257 tests**, including **132 PostgreSQL tests**:
+all 159 existing tests, 19 new unit tests, 33 lifecycle PostgreSQL tests, the original 16 archive
+PostgreSQL tests, and 30 archive-completeness regressions. All original 227 tests
+remain required. Missing groups, skips, failures, errors, expected failures or
 unexpected successes fail verification. Future test changes must update exact counts.
 No workflow is dispatched or branch published during this assignment.
 
