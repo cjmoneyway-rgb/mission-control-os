@@ -25,6 +25,17 @@ ROLE_ACTIONS = {
     'encryption_custodian': {'encryption.manage'},
 }
 
+# Inactive Phase 1C capabilities; each still needs an exact-resource policy grant.
+ROLE_ACTIONS['data_writer'].update({'registry.department.read','registry.department.append',
+    'registry.rule.read','registry.rule.append','packet.route_simulate','packet.routing.append',
+    'packet.routing.read','journey.routing.read'})
+ROLE_ACTIONS['service_writer'].update(ROLE_ACTIONS['data_writer'])
+ROLE_ACTIONS['data_reader'].update({'packet.view.executive','packet.view.team',
+    'packet.view.command','packet.view.control','packet.view.governance','packet.distribute'})
+ROLE_ACTIONS['policy_admin'].add('policy.reference.append')
+ROLE_ACTIONS['approval_issuer'].update({'registry.department.read','registry.rule.read',
+    'approval.routing.issue','approval.routing.verify','approval.routing.revoke'})
+
 
 def synthetic_reference(value):
     text(value)

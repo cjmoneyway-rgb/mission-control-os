@@ -124,13 +124,16 @@ class LocalSyntheticStore:
         self.authority = authority
         self.custody = custody
 
+    def transaction_type(self):
+        return SyntheticTransaction
+
     @contextmanager
     def transaction(self, tenant_reference, session_reference, policy_revision):
         if not isinstance(self.authority, SyntheticAuthority) or self.factory is None:
             raise PermissionError('Local synthetic storage is disabled')
         self.authority.resolve(session_reference, tenant_reference, policy_revision)
         connection = self.factory()
-        tx = SyntheticTransaction(connection, self.authority, self.custody,
+        tx = self.transaction_type()(connection, self.authority, self.custody,
                                   tenant_reference, session_reference, policy_revision)
         try:
             _query(connection, 'BEGIN ISOLATION LEVEL SERIALIZABLE')

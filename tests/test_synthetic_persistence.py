@@ -386,7 +386,9 @@ class ArchiveProofTests(unittest.TestCase):
             self.assertFalse(path.exists())
             self.assertEqual(list(Path(folder).iterdir()),[])
 
-    def test_restore_requires_empty_target_exact_tenant_and_explicit_commit(self):
+    @patch('mission_control.synthetic_archive._query',return_value=([{'relation':None}],1))
+    def test_restore_requires_empty_target_exact_tenant_and_explicit_commit(self, schema_probe):
+        # Recording-only v1 archive fixture explicitly models the baseline schema.
         tx=SyntheticTransaction(None,self.authority,self.custody,'syn-tenant-1',session_ref('migration_operator'),1)
         staging={name:[] for name in ENTITIES}
         tx._select=lambda table,**keys: staging[table]

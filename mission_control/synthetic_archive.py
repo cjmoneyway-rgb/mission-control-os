@@ -11,16 +11,24 @@ from .json_io import strict_json_loads
 from .registry_persistence import validate_event_append
 from .synthetic_identity import canonical, canonical_bytes, fingerprint, synthetic_reference
 from .synthetic_postgres import (ENTITIES, LOGICAL_PATH, SQL_PATH, event_from,
-                                 packet_from, registry_from, transactional_operation)
+                                 packet_from, registry_from, transactional_operation, _query)
 
 
 def migration_checksum():
     return fingerprint({'sql':SQL_PATH.read_text(),'logical':strict_json_loads(LOGICAL_PATH.read_text())})
 
 
+def require_baseline_archive_schema(tx):
+    # v1 archives must never silently omit a newer registry/routing extension.
+    rows,_ = _query(tx.connection, "SELECT to_regclass('mc_syn.routing_records') AS relation")
+    if rows and rows[0]['relation'] is not None:
+        raise ValueError('Phase 1C requires a separately reviewed complete archive format')
+
+
 @transactional_operation
 def export_snapshot(tx, custody):
     actor,_ = tx._auth('backup.export','syn-backup')
+    require_baseline_archive_schema(tx)
     tables = {name:sorted([canonical(row) for row in tx._select(name)],key=canonical_bytes) for name in ENTITIES}
     payload = {'format':'syn-postgres-export-v1','dataset':'synthetic','tenant':tx.tenant,
                'migration_checksum':migration_checksum(),'tables':tables}
@@ -194,6 +202,7 @@ def read_archive(path,custody):
 @transactional_operation
 def restore_snapshot(tx,archive,custody):
     actor,_ = tx._auth('backup.restore','syn-backup',context=False)
+    require_baseline_archive_schema(tx)
     payload = validate_archive(archive,custody)
     if payload['tenant'] != tx.tenant:
         raise PermissionError('Cross-tenant restore forbidden')
