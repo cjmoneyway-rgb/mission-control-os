@@ -448,3 +448,11 @@ Mission Control OS™ does not replace executive judgment. It creates a governed
 **Proceed Brick by Brick™.**  
 **Built For Purpose™.**  
 **Faith • Vision • Legacy™.**
+
+### Phase 2B local synthetic HTTP review
+
+The disabled-by-default [localhost HTTP boundary](docs/phase-2b-localhost-http-boundary.md)
+wraps Phase 2A with explicit synthetic startup, loopback-only binding, server-held
+identity fixtures and strict HTTP admission. The CEO Command Center endpoint
+reuses the existing command visibility projection. All seven connectors remain
+disabled; no operational routing, deployment or pilot is authorized.

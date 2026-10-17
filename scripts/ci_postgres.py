@@ -118,11 +118,12 @@ def verify():
               'tests.test_pilot_postgres.PilotPostgreSQLTests.': 33,
               'tests.test_pilot_archive_postgres.PilotArchivePostgreSQLTests.': 16,
               'tests.test_pilot_archive_completeness_postgres.ArchiveCompletenessPostgreSQLTests.': 30,
-              'tests.test_connection_postgres.ConnectionPostgreSQLTests.': 25}
+              'tests.test_connection_postgres.ConnectionPostgreSQLTests.': 25,
+              'tests.test_local_http_postgres.LocalHTTPPostgreSQLTests.': 10}
     pg_ids = {identifier for identifier in ids if identifier.startswith(tuple(groups))}
-    if len(ids) != 342 or any(sum(identifier.startswith(prefix) for identifier in ids) != count
+    if len(ids) != 373 or any(sum(identifier.startswith(prefix) for identifier in ids) != count
                              for prefix,count in groups.items()):
-        raise RuntimeError('Expected exactly 342 tests including 157 PostgreSQL tests')
+        raise RuntimeError('Expected exactly 373 tests including 167 PostgreSQL tests')
     result = unittest.TextTestRunner(verbosity=2,resultclass=ExecutedResult).run(suite)
     counts = {'discovered':len(ids),'executed':result.testsRun,
               'postgresql_executed':len(pg_ids & set(result.executed_ids)),
@@ -133,7 +134,7 @@ def verify():
     if summary:
         with open(summary,'a') as handle:
             handle.write('### Synthetic test results\n\n```json\n'+json.dumps(counts,indent=2)+'\n```\n')
-    if (not result.wasSuccessful() or result.testsRun != 342 or counts['postgresql_executed'] != 157
+    if (not result.wasSuccessful() or result.testsRun != 373 or counts['postgresql_executed'] != 167
             or result.skipped or result.expectedFailures or result.unexpectedSuccesses):
         raise SystemExit(1)
 
