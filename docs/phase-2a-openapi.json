@@ -1,0 +1,3013 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Mission Control OS synthetic internal connection contract",
+    "version": "1.0.0",
+    "description": "HTTP-shaped in-process gateway; NO HTTP listener is implemented or started. GET request bodies describe local envelope arguments, not a deployed browser API. A future HTTP binding requires separate review. Byte/depth/duplicate-key checks and policy/domain validation remain authoritative beyond JSON Schema."
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1",
+      "description": "Reserved localhost contract only; no endpoint is bound or published."
+    }
+  ],
+  "paths": {
+    "/v1/intake": {
+      "post": {
+        "operationId": "intake_post",
+        "summary": "Inactive synthetic intake",
+        "security": [
+          {
+            "SyntheticFixtureContext": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ConnectionRequest"
+                  },
+                  {
+                    "properties": {
+                      "requested_action": {
+                        "const": "intake"
+                      },
+                      "payload": {
+                        "$ref": "#/components/schemas/intakePayload"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inactive projection; no operational authority",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "408": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/classifications/preserve": {
+      "post": {
+        "operationId": "classification_preserve_post",
+        "summary": "Inactive synthetic classification.preserve",
+        "security": [
+          {
+            "SyntheticFixtureContext": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ConnectionRequest"
+                  },
+                  {
+                    "properties": {
+                      "requested_action": {
+                        "const": "classification.preserve"
+                      },
+                      "payload": {
+                        "$ref": "#/components/schemas/classification.preservePayload"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inactive projection; no operational authority",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "408": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/routing/preview": {
+      "post": {
+        "operationId": "routing_preview_post",
+        "summary": "Inactive synthetic routing.preview",
+        "security": [
+          {
+            "SyntheticFixtureContext": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ConnectionRequest"
+                  },
+                  {
+                    "properties": {
+                      "requested_action": {
+                        "const": "routing.preview"
+                      },
+                      "payload": {
+                        "$ref": "#/components/schemas/routing.previewPayload"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inactive projection; no operational authority",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "408": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/work-packets": {
+      "post": {
+        "operationId": "work-packet_create_post",
+        "summary": "Inactive synthetic work-packet.create",
+        "security": [
+          {
+            "SyntheticFixtureContext": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ConnectionRequest"
+                  },
+                  {
+                    "properties": {
+                      "requested_action": {
+                        "const": "work-packet.create"
+                      },
+                      "payload": {
+                        "$ref": "#/components/schemas/work-packet.createPayload"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inactive projection; no operational authority",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "408": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/work-packets/{packet_id}": {
+      "get": {
+        "operationId": "visibility_project_get_packet",
+        "summary": "Inactive synthetic visibility.project",
+        "security": [
+          {
+            "SyntheticFixtureContext": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ConnectionRequest"
+                  },
+                  {
+                    "properties": {
+                      "requested_action": {
+                        "const": "visibility.project"
+                      },
+                      "payload": {
+                        "$ref": "#/components/schemas/visibility.projectPayload"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inactive projection; no operational authority",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "408": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "packet_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+            }
+          }
+        ]
+      }
+    },
+    "/v1/decisions": {
+      "post": {
+        "operationId": "decision_submit_post",
+        "summary": "Inactive synthetic decision.submit",
+        "security": [
+          {
+            "SyntheticFixtureContext": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ConnectionRequest"
+                  },
+                  {
+                    "properties": {
+                      "requested_action": {
+                        "const": "decision.submit"
+                      },
+                      "payload": {
+                        "$ref": "#/components/schemas/decision.submitPayload"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inactive projection; no operational authority",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "408": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/assignments/acknowledge": {
+      "post": {
+        "operationId": "assignment_acknowledge_post",
+        "summary": "Inactive synthetic assignment.acknowledge",
+        "security": [
+          {
+            "SyntheticFixtureContext": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ConnectionRequest"
+                  },
+                  {
+                    "properties": {
+                      "requested_action": {
+                        "const": "assignment.acknowledge"
+                      },
+                      "payload": {
+                        "$ref": "#/components/schemas/assignment.acknowledgePayload"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inactive projection; no operational authority",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "408": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/handoffs": {
+      "post": {
+        "operationId": "handoff_record_post",
+        "summary": "Inactive synthetic handoff.record",
+        "security": [
+          {
+            "SyntheticFixtureContext": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ConnectionRequest"
+                  },
+                  {
+                    "properties": {
+                      "requested_action": {
+                        "const": "handoff.record"
+                      },
+                      "payload": {
+                        "$ref": "#/components/schemas/handoff.recordPayload"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inactive projection; no operational authority",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "408": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/outcomes": {
+      "post": {
+        "operationId": "outcome_record_post",
+        "summary": "Inactive synthetic outcome.record",
+        "security": [
+          {
+            "SyntheticFixtureContext": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ConnectionRequest"
+                  },
+                  {
+                    "properties": {
+                      "requested_action": {
+                        "const": "outcome.record"
+                      },
+                      "payload": {
+                        "$ref": "#/components/schemas/outcome.recordPayload"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inactive projection; no operational authority",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "408": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/journeys/{journey_id}": {
+      "get": {
+        "operationId": "journey_read_get",
+        "summary": "Inactive synthetic journey.read",
+        "security": [
+          {
+            "SyntheticFixtureContext": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ConnectionRequest"
+                  },
+                  {
+                    "properties": {
+                      "requested_action": {
+                        "const": "journey.read"
+                      },
+                      "payload": {
+                        "$ref": "#/components/schemas/journey.readPayload"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inactive projection; no operational authority",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "408": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "journey_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+            }
+          }
+        ]
+      }
+    },
+    "/v1/visibility": {
+      "get": {
+        "operationId": "visibility_project_get",
+        "summary": "Inactive synthetic visibility.project",
+        "security": [
+          {
+            "SyntheticFixtureContext": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ConnectionRequest"
+                  },
+                  {
+                    "properties": {
+                      "requested_action": {
+                        "const": "visibility.project"
+                      },
+                      "payload": {
+                        "$ref": "#/components/schemas/visibility.projectPayload"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inactive projection; no operational authority",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "408": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/governance/review": {
+      "post": {
+        "operationId": "governance_review_post",
+        "summary": "Inactive synthetic governance.review",
+        "security": [
+          {
+            "SyntheticFixtureContext": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ConnectionRequest"
+                  },
+                  {
+                    "properties": {
+                      "requested_action": {
+                        "const": "governance.review"
+                      },
+                      "payload": {
+                        "$ref": "#/components/schemas/governance.reviewPayload"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inactive projection; no operational authority",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "408": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/outbox": {
+      "post": {
+        "operationId": "outbox_prepare_post",
+        "summary": "Inactive synthetic outbox.prepare",
+        "security": [
+          {
+            "SyntheticFixtureContext": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ConnectionRequest"
+                  },
+                  {
+                    "properties": {
+                      "requested_action": {
+                        "const": "outbox.prepare"
+                      },
+                      "payload": {
+                        "$ref": "#/components/schemas/outbox.preparePayload"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inactive projection; no operational authority",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "408": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/readiness": {
+      "get": {
+        "operationId": "readiness_status_get",
+        "summary": "Inactive synthetic readiness.status",
+        "security": [
+          {
+            "SyntheticFixtureContext": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ConnectionRequest"
+                  },
+                  {
+                    "properties": {
+                      "requested_action": {
+                        "const": "readiness.status"
+                      },
+                      "payload": {
+                        "$ref": "#/components/schemas/readiness.statusPayload"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inactive projection; no operational authority",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "408": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "health_get",
+        "summary": "Inactive synthetic health",
+        "security": [
+          {
+            "SyntheticFixtureContext": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ConnectionRequest"
+                  },
+                  {
+                    "properties": {
+                      "requested_action": {
+                        "const": "health"
+                      },
+                      "payload": {
+                        "$ref": "#/components/schemas/healthPayload"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inactive projection; no operational authority",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "408": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Intake": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "tenant_reference",
+          "event_id",
+          "original_classification",
+          "fact_references",
+          "source_reference",
+          "revision",
+          "state",
+          "schema_revision",
+          "content_digest"
+        ],
+        "properties": {
+          "tenant_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "event_id": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "original_classification": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "fact_references": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+            }
+          },
+          "source_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "state": {
+            "const": "inactive"
+          },
+          "schema_revision": {
+            "type": "integer",
+            "const": 1
+          },
+          "content_digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      },
+      "DepartmentPacket": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "tenant_reference",
+          "packet_id",
+          "revision",
+          "source_event_reference",
+          "original_classification",
+          "current_classification",
+          "executive_reference",
+          "recipient_references",
+          "required_action",
+          "dependencies",
+          "priority",
+          "decision_reference",
+          "visibility_references",
+          "outcome_references",
+          "handoff_references",
+          "registry_revision",
+          "registry_digest",
+          "rule_reference",
+          "rule_revision",
+          "rule_digest",
+          "idempotency_reference",
+          "state",
+          "schema_revision",
+          "content_digest"
+        ],
+        "properties": {
+          "tenant_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "packet_id": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "source_event_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "original_classification": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "current_classification": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "executive_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "recipient_references": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+            }
+          },
+          "required_action": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+            }
+          },
+          "priority": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "decision_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "visibility_references": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+            }
+          },
+          "outcome_references": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+            }
+          },
+          "handoff_references": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+            }
+          },
+          "registry_revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "registry_digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "rule_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "rule_revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "rule_digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "idempotency_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "state": {
+            "const": "inactive"
+          },
+          "schema_revision": {
+            "type": "integer",
+            "const": 1
+          },
+          "content_digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      },
+      "GuestJourney": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "tenant_reference",
+          "journey_id",
+          "guest_reference",
+          "intake_reference",
+          "original_classification",
+          "revision",
+          "state",
+          "schema_revision",
+          "content_digest"
+        ],
+        "properties": {
+          "tenant_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "journey_id": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "guest_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "intake_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "original_classification": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "state": {
+            "const": "inactive"
+          },
+          "schema_revision": {
+            "type": "integer",
+            "const": 1
+          },
+          "content_digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      },
+      "GuestEvent": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "tenant_reference",
+          "journey_reference",
+          "event_id",
+          "revision",
+          "stage_reference",
+          "classification",
+          "previous_event_reference",
+          "dependency_references",
+          "evidence_references",
+          "outcome_references",
+          "handoff_references",
+          "rule_reference",
+          "rule_revision",
+          "rule_digest",
+          "approval_reference",
+          "terminal_reference",
+          "state",
+          "schema_revision",
+          "content_digest"
+        ],
+        "properties": {
+          "tenant_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "journey_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "event_id": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "stage_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "classification": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "previous_event_reference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dependency_references": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+            }
+          },
+          "evidence_references": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+            }
+          },
+          "outcome_references": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+            }
+          },
+          "handoff_references": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+            }
+          },
+          "rule_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "rule_revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "rule_digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "approval_reference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "terminal_reference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "state": {
+            "const": "inactive"
+          },
+          "schema_revision": {
+            "type": "integer",
+            "const": 1
+          },
+          "content_digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      },
+      "CommandCenterStage": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "stage",
+          "record_type",
+          "record_reference",
+          "evidence_references",
+          "responsible_role_reference",
+          "allowed_viewers",
+          "dependencies",
+          "decision_required",
+          "next_action_reference",
+          "outcome_references",
+          "measurement_reference",
+          "escalation_state",
+          "status"
+        ],
+        "properties": {
+          "stage": {
+            "enum": [
+              "information",
+              "intelligence",
+              "decision",
+              "assignment",
+              "execution",
+              "measurement"
+            ]
+          },
+          "record_type": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "record_reference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "evidence_references": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+            }
+          },
+          "responsible_role_reference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "allowed_viewers": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+            }
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+            }
+          },
+          "decision_required": {
+            "type": "boolean"
+          },
+          "next_action_reference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "outcome_references": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+            }
+          },
+          "measurement_reference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "escalation_state": {
+            "const": "unresolved"
+          },
+          "status": {
+            "const": "inactive"
+          }
+        }
+      },
+      "OutboxIntention": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "tenant_reference",
+          "request_reference",
+          "correlation_reference",
+          "actor_reference",
+          "connector_reference",
+          "record_reference",
+          "authorization_decision_reference",
+          "audit_event_reference",
+          "state",
+          "dataset",
+          "schema_version"
+        ],
+        "properties": {
+          "tenant_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "request_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "correlation_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "actor_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "connector_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "record_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "authorization_decision_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "audit_event_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "state": {
+            "const": "inactive"
+          },
+          "dataset": {
+            "const": "synthetic"
+          },
+          "schema_version": {
+            "type": "integer",
+            "const": 1
+          }
+        }
+      },
+      "ConnectionRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "request_id",
+          "correlation_reference",
+          "tenant_reference",
+          "actor_reference",
+          "actor_type",
+          "authentication_state_reference",
+          "data_classification",
+          "purpose",
+          "idempotency_key",
+          "schema_version",
+          "source_surface",
+          "timestamp",
+          "requested_action",
+          "resource_reference",
+          "expected_revision",
+          "payload"
+        ],
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "correlation_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "tenant_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "actor_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "actor_type": {
+            "enum": [
+              "human",
+              "service"
+            ]
+          },
+          "authentication_state_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "data_classification": {
+            "const": "syn-synthetic"
+          },
+          "purpose": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "idempotency_key": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "schema_version": {
+            "type": "integer",
+            "const": 1
+          },
+          "source_surface": {
+            "enum": [
+              "syn-chatgpt",
+              "syn-command-center",
+              "syn-dashboard",
+              "syn-slack",
+              "syn-hubspot",
+              "syn-email",
+              "syn-calendar",
+              "syn-documents",
+              "syn-publishing"
+            ]
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Aware, within 60 seconds of trusted local clock."
+          },
+          "requested_action": {
+            "enum": [
+              "intake",
+              "classification.preserve",
+              "routing.preview",
+              "work-packet.create",
+              "decision.submit",
+              "assignment.acknowledge",
+              "handoff.record",
+              "outcome.record",
+              "journey.read",
+              "visibility.project",
+              "governance.review",
+              "outbox.prepare",
+              "readiness.status",
+              "health"
+            ]
+          },
+          "resource_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "payload": {
+            "type": "object"
+          }
+        }
+      },
+      "intakePayload": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "intake",
+          "journey"
+        ],
+        "properties": {
+          "intake": {
+            "$ref": "#/components/schemas/Intake"
+          },
+          "journey": {
+            "$ref": "#/components/schemas/GuestJourney"
+          }
+        }
+      },
+      "classification.preservePayload": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "original_classification"
+        ],
+        "properties": {
+          "original_classification": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          }
+        }
+      },
+      "routing.previewPayload": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "intake",
+          "rule_revision"
+        ],
+        "properties": {
+          "intake": {
+            "$ref": "#/components/schemas/Intake"
+          },
+          "rule_revision": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "work-packet.createPayload": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "event_reference",
+          "proposal_revision"
+        ],
+        "properties": {
+          "event_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "proposal_revision": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "decision.submitPayload": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "event"
+        ],
+        "properties": {
+          "event": {
+            "$ref": "#/components/schemas/GuestEvent"
+          }
+        }
+      },
+      "assignment.acknowledgePayload": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "acknowledgement_reference",
+          "packet"
+        ],
+        "properties": {
+          "acknowledgement_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "packet": {
+            "$ref": "#/components/schemas/DepartmentPacket"
+          }
+        }
+      },
+      "handoff.recordPayload": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "handoff_reference",
+          "packet"
+        ],
+        "properties": {
+          "handoff_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "packet": {
+            "$ref": "#/components/schemas/DepartmentPacket"
+          }
+        }
+      },
+      "outcome.recordPayload": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "outcome_reference",
+          "packet"
+        ],
+        "properties": {
+          "outcome_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "packet": {
+            "$ref": "#/components/schemas/DepartmentPacket"
+          }
+        }
+      },
+      "journey.readPayload": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {}
+      },
+      "visibility.projectPayload": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "audience",
+          "team_reference"
+        ],
+        "properties": {
+          "audience": {
+            "enum": [
+              "executive",
+              "team",
+              "command",
+              "control",
+              "governance"
+            ]
+          },
+          "team_reference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "governance.reviewPayload": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "output_reference"
+        ],
+        "properties": {
+          "output_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          }
+        }
+      },
+      "outbox.preparePayload": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "connector_reference",
+          "record_reference"
+        ],
+        "properties": {
+          "connector_reference": {
+            "enum": [
+              "syn-chatgpt",
+              "syn-slack",
+              "syn-hubspot",
+              "syn-email",
+              "syn-calendar",
+              "syn-documents",
+              "syn-publishing"
+            ]
+          },
+          "record_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          }
+        }
+      },
+      "readiness.statusPayload": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {}
+      },
+      "healthPayload": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {}
+      },
+      "Error": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "schema_version",
+          "state",
+          "operational_authorized",
+          "error"
+        ],
+        "properties": {
+          "schema_version": {
+            "const": 1
+          },
+          "state": {
+            "const": "inactive"
+          },
+          "operational_authorized": {
+            "const": false
+          },
+          "error": {
+            "enum": [
+              "route_unavailable",
+              "rate_limited",
+              "interrupted",
+              "revision_or_idempotency_conflict",
+              "denied",
+              "invalid_request",
+              "service_unavailable"
+            ]
+          }
+        }
+      },
+      "ConnectionResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "request_id",
+          "correlation_reference",
+          "tenant_reference",
+          "actor_reference",
+          "actor_type",
+          "authentication_state_reference",
+          "data_classification",
+          "purpose",
+          "idempotency_key",
+          "schema_version",
+          "source_surface",
+          "timestamp",
+          "requested_action",
+          "authorization_decision_reference",
+          "audit_event_reference",
+          "state",
+          "operational_authorized",
+          "result",
+          "inactive_outbox"
+        ],
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "correlation_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "tenant_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "actor_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "actor_type": {
+            "enum": [
+              "human",
+              "service"
+            ]
+          },
+          "authentication_state_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "data_classification": {
+            "const": "syn-synthetic"
+          },
+          "purpose": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "idempotency_key": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "schema_version": {
+            "type": "integer",
+            "const": 1
+          },
+          "source_surface": {
+            "enum": [
+              "syn-chatgpt",
+              "syn-command-center",
+              "syn-dashboard",
+              "syn-slack",
+              "syn-hubspot",
+              "syn-email",
+              "syn-calendar",
+              "syn-documents",
+              "syn-publishing"
+            ]
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Aware, within 60 seconds of trusted local clock."
+          },
+          "requested_action": {
+            "enum": [
+              "intake",
+              "classification.preserve",
+              "routing.preview",
+              "work-packet.create",
+              "decision.submit",
+              "assignment.acknowledge",
+              "handoff.record",
+              "outcome.record",
+              "journey.read",
+              "visibility.project",
+              "governance.review",
+              "outbox.prepare",
+              "readiness.status",
+              "health"
+            ]
+          },
+          "authorization_decision_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "audit_event_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "state": {
+            "const": "inactive"
+          },
+          "operational_authorized": {
+            "const": false
+          },
+          "result": {
+            "$ref": "#/components/schemas/MinimizedProjection"
+          },
+          "inactive_outbox": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OutboxIntention"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "MinimizedProjection": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "state"
+        ],
+        "properties": {
+          "version": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "audience": {
+            "enum": [
+              "executive",
+              "team",
+              "command",
+              "control",
+              "governance"
+            ]
+          },
+          "operational_authorized": {
+            "const": false
+          },
+          "intake_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "passed": {
+            "type": "boolean"
+          },
+          "original_classification": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "finding_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "record_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "completed_stage": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "event_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "state": {
+            "const": "inactive"
+          },
+          "packet_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "event_reference",
+                "sequence",
+                "disposition"
+              ],
+              "properties": {
+                "event_reference": {
+                  "type": "string",
+                  "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+                },
+                "sequence": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "disposition": {
+                  "enum": [
+                    "accepted",
+                    "blocked"
+                  ]
+                }
+              }
+            }
+          },
+          "synthetic_ready": {
+            "type": "boolean"
+          },
+          "current_classification": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "executive_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "connector_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "verified_controls": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sequence": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "packet_references": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+            }
+          },
+          "disposition": {
+            "enum": [
+              "accepted",
+              "blocked"
+            ]
+          },
+          "status": {
+            "enum": [
+              "accepted",
+              "blocked",
+              "proposed",
+              "pending",
+              "completed",
+              "closed"
+            ]
+          },
+          "journey_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "required_action": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "source_event_reference": {
+            "type": "string",
+            "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+          },
+          "department_references": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^syn-[a-z0-9][a-z0-9_-]{0,150}$"
+            }
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "SyntheticFixtureContext": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-Synthetic-Context-Reference",
+        "description": "Reserved future local binding, NOT an API key implementation. A header or opaque reference alone is never authentication; Gateway.handle requires a separately trusted LocalContext and verifier. No HTTP header adapter exists."
+      }
+    }
+  },
+  "x-max-request-bytes": 65536,
+  "x-max-response-bytes": 65536,
+  "x-no-operational-adapters": true
+}

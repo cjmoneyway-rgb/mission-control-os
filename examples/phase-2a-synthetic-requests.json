@@ -1,0 +1,188 @@
+{
+  "dataset": "synthetic",
+  "schema_version": 1,
+  "requests": [
+    {
+      "request_id": "syn-request-1",
+      "correlation_reference": "syn-pilot-journey-1",
+      "tenant_reference": "syn-tenant-1",
+      "actor_reference": "syn-audit_reviewer-syn-tenant-1",
+      "actor_type": "human",
+      "authentication_state_reference": "syn-session-audit_reviewer-syn-tenant-1",
+      "data_classification": "syn-synthetic",
+      "purpose": "syn-technical-review",
+      "idempotency_key": "syn-key-1",
+      "schema_version": 1,
+      "source_surface": "syn-dashboard",
+      "timestamp": "2026-01-01T00:00:00+00:00",
+      "requested_action": "health",
+      "resource_reference": "syn-system",
+      "expected_revision": 1,
+      "payload": {}
+    },
+    {
+      "request_id": "syn-request-1",
+      "correlation_reference": "syn-pilot-journey-1",
+      "tenant_reference": "syn-tenant-1",
+      "actor_reference": "syn-data_writer-syn-tenant-1",
+      "actor_type": "human",
+      "authentication_state_reference": "syn-session-data_writer-syn-tenant-1",
+      "data_classification": "syn-synthetic",
+      "purpose": "syn-technical-review",
+      "idempotency_key": "syn-key-1",
+      "schema_version": 1,
+      "source_surface": "syn-dashboard",
+      "timestamp": "2026-01-01T00:00:00+00:00",
+      "requested_action": "intake",
+      "resource_reference": "syn-pilot-journey-1",
+      "expected_revision": 0,
+      "payload": {
+        "journey": {
+          "tenant_reference": "syn-tenant-1",
+          "journey_id": "syn-pilot-journey-1",
+          "guest_reference": "syn-guest-1",
+          "intake_reference": "syn-pilot-intake-1",
+          "original_classification": "syn-entry-class",
+          "revision": 1,
+          "state": "inactive",
+          "schema_revision": 1,
+          "content_digest": "e14bd0c00efca47065d7f13c6f616469dc07bcffed35b762a19d58e540db9213"
+        },
+        "intake": {
+          "tenant_reference": "syn-tenant-1",
+          "event_id": "syn-pilot-intake-1",
+          "original_classification": "syn-entry-class",
+          "fact_references": [],
+          "source_reference": "syn-source-1",
+          "revision": 1,
+          "state": "inactive",
+          "schema_revision": 1,
+          "content_digest": "bbd580e27b434b89b5e10248f648f6529dec8f428ef4fdd9d3552f9c9305902e"
+        }
+      }
+    },
+    {
+      "request_id": "syn-request-1",
+      "correlation_reference": "syn-pilot-journey-1",
+      "tenant_reference": "syn-tenant-1",
+      "actor_reference": "syn-data_writer-syn-tenant-1",
+      "actor_type": "human",
+      "authentication_state_reference": "syn-session-data_writer-syn-tenant-1",
+      "data_classification": "syn-synthetic",
+      "purpose": "syn-technical-review",
+      "idempotency_key": "syn-key-1",
+      "schema_version": 1,
+      "source_surface": "syn-dashboard",
+      "timestamp": "2026-01-01T00:00:00+00:00",
+      "requested_action": "decision.submit",
+      "resource_reference": "syn-pilot-journey-1",
+      "expected_revision": 0,
+      "payload": {
+        "event": {
+          "tenant_reference": "syn-tenant-1",
+          "journey_reference": "syn-pilot-journey-1",
+          "event_id": "syn-pilot-event-01",
+          "revision": 1,
+          "stage_reference": "syn-stage-01",
+          "classification": "syn-class-01",
+          "previous_event_reference": null,
+          "dependency_references": [],
+          "evidence_references": [
+            "syn-evidence-01"
+          ],
+          "outcome_references": [
+            "syn-pilot-outcome-01"
+          ],
+          "handoff_references": [
+            "syn-pilot-handoff-01"
+          ],
+          "rule_reference": "syn-pilot-rule-01",
+          "rule_revision": 1,
+          "rule_digest": "ec3e73c857c30bb356befe180a8bcc3ff5b7442fd3575d811bb47d7f7820bd0d",
+          "approval_reference": "syn-pilot-approval-01",
+          "terminal_reference": null,
+          "state": "inactive",
+          "schema_revision": 1,
+          "content_digest": "882ee7b1deedffccb207deaaec181f23d56a7f842f5d8772f3adec3af546f915"
+        }
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "request": {
+        "request_id": "syn-request-1",
+        "correlation_reference": "syn-pilot-journey-1",
+        "tenant_reference": "syn-tenant-1",
+        "actor_reference": "syn-audit_reviewer-syn-tenant-1",
+        "actor_type": "human",
+        "authentication_state_reference": "syn-session-audit_reviewer-syn-tenant-1",
+        "data_classification": "syn-synthetic",
+        "purpose": "syn-technical-review",
+        "idempotency_key": "syn-key-1",
+        "schema_version": 1,
+        "source_surface": "syn-dashboard",
+        "timestamp": "2026-10-17T04:31:33.902464+00:00",
+        "requested_action": "health",
+        "resource_reference": "syn-system",
+        "expected_revision": 1,
+        "payload": {}
+      },
+      "status": 200,
+      "response": {
+        "schema_version": 1,
+        "request_id": "syn-request-1",
+        "correlation_reference": "syn-pilot-journey-1",
+        "tenant_reference": "syn-tenant-1",
+        "actor_reference": "syn-audit_reviewer-syn-tenant-1",
+        "actor_type": "human",
+        "authentication_state_reference": "syn-session-audit_reviewer-syn-tenant-1",
+        "data_classification": "syn-synthetic",
+        "purpose": "syn-technical-review",
+        "idempotency_key": "syn-key-1",
+        "source_surface": "syn-dashboard",
+        "timestamp": "2026-10-17T04:31:33.902464+00:00",
+        "requested_action": "health",
+        "authorization_decision_reference": "syn-authz-77e0fd5b80e2f888ea38f12c664781212a0f8f6180b7cb405df5997fbfb9046c",
+        "audit_event_reference": "syn-api-audit-1b57d12d0eb1a89c13b59591b09fb12d17ddd623d6c89e4f54bd24cb5117a1e0",
+        "state": "inactive",
+        "operational_authorized": false,
+        "result": {
+          "state": "inactive"
+        },
+        "inactive_outbox": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "request": {
+        "request_id": "syn-request-1",
+        "correlation_reference": "syn-pilot-journey-1",
+        "tenant_reference": "syn-tenant-1",
+        "actor_reference": "syn-audit_reviewer-syn-tenant-1",
+        "actor_type": "human",
+        "authentication_state_reference": "syn-session-audit_reviewer-syn-tenant-1",
+        "data_classification": "syn-synthetic",
+        "purpose": "syn-technical-review",
+        "idempotency_key": "syn-key-1",
+        "schema_version": 1,
+        "source_surface": "syn-dashboard",
+        "timestamp": "2026-10-17T04:31:33.902464+00:00",
+        "requested_action": "health",
+        "resource_reference": "syn-system",
+        "expected_revision": 1,
+        "payload": {}
+      },
+      "status": 403,
+      "response": {
+        "schema_version": 1,
+        "state": "inactive",
+        "operational_authorized": false,
+        "error": "denied"
+      }
+    }
+  ]
+}

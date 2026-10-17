@@ -49,7 +49,7 @@ jobs:
         env:
           MC_SYN_POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
         run: '"$RUNNER_TEMP/mc-syn-venv/bin/python" scripts/ci_postgres.py bootstrap'
-      - name: Execute exactly 277 tests with all 132 PostgreSQL tests and zero skips
+      - name: Execute exactly 342 tests with all 157 PostgreSQL tests and zero skips
         run: '"$RUNNER_TEMP/mc-syn-venv/bin/python" scripts/ci_postgres.py verify'
       - name: Check diff whitespace
         run: git diff --check
