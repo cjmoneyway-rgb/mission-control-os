@@ -354,7 +354,7 @@ pilot-authorization plan. Phase 2A adds strict local gateway, admission, connect
 transaction, visibility and interruption tests.
 Passing these tests does not authorize external processing or operational routing.
 
-## Repository map
+## Repository map (selected development entry points)
 
 ```text
 mission-control-os/
@@ -373,16 +373,28 @@ mission-control-os/
 │   ├── contracts.py                # Synthetic registry, approval, and lifecycle
 │   ├── readiness.py                # Phase 1E evidence and pilot-authorization gates
 │   ├── json_io.py                  # Strict JSON; rejects duplicate keys
+│   ├── connection_gateway.py       # Phase 2A synthetic policy/service dispatch
+│   ├── connection_services.py      # Existing Phase 1 service delegation
+│   ├── local_http.py               # Phase 2B strict localhost HTTP boundary
+│   ├── command_center_ui.py        # Phase 2C local UI/session/confirmation binding
+│   ├── command_center_assets/      # Self-hosted HTML, CSS and small JavaScript
 │   └── departments.json            # Public demo catalog; not a private registry
 ├── docs/
 │   ├── phase-1a-security.md         # Initial hardening boundaries
+│   ├── phase-2c-local-ceo-command-center.md # UI controls and governed projections
 │   ├── phase-1d-synthetic-podcast-pilot.md # Complete inactive pilot proof
 │   └── phase-1e-production-readiness.md # Pre-provisioning gates and decisions
+├── scripts/
+│   ├── local_postgres_tests.py      # Complete disposable PostgreSQL suite
+│   ├── demo_command_center.py      # Temporary synthetic UI demonstration
+│   └── verify_command_center_browser.js # Development Chromium/keyboard checks
 ├── examples/
 │   └── sample_request.txt          # Public demonstration directive
 └── tests/
     ├── __init__.py
     ├── test_cli.py                 # Offline CLI checks
+    ├── test_command_center_ui.py    # UI/session/security/accessibility structure
+    ├── test_command_center_postgres.py # Confirmed synthetic writes/rollback
     ├── test_engine.py              # Routing, review, and audit behavior
     ├── test_openai_provider.py     # Fake SDK contract; no live API validation
     ├── test_hardening.py           # Phase 1A fail-closed regressions
@@ -395,7 +407,7 @@ mission-control-os/
 
 The offline CLI, synthetic PostgreSQL architecture, registry/routing contracts,
 inactive podcast lifecycle, complete synthetic archive and Phase 1E readiness gates
-are covered by the 342-test suite. Technical checks and synthetic evidence do not
+are covered by the 424-test suite, including 189 PostgreSQL tests. Technical checks and synthetic evidence do not
 establish enterprise authorization, production data isolation, factual correctness
 or permission to admit confidential records.
 
@@ -456,3 +468,17 @@ wraps Phase 2A with explicit synthetic startup, loopback-only binding, server-he
 identity fixtures and strict HTTP admission. The CEO Command Center endpoint
 reuses the existing command visibility projection. All seven connectors remain
 disabled; no operational routing, deployment or pilot is authorized.
+
+### Phase 2C local CEO Command Center
+
+The [local CEO interface](docs/phase-2c-local-ceo-command-center.md) presents six
+server-authorized queues with minimized items and counts. It uses server-held
+synthetic identity, ephemeral HttpOnly sessions, same-origin/CSRF controls, and
+confirmation-gated existing synthetic actions with fresh server eligibility.
+Unknown values stay explicit. All seven connectors remain disabled.
+
+The corrective contracts derive from the existing protected records and append-only
+history, without a new store or migration. This is synthetic and not production-ready;
+technical eligibility is not organizational approval. Automated accessibility and
+keyboard checks pass; manual assistive-technology review remains required before
+production or confidential use. Demonstrations stop their temporary listeners.

@@ -20,6 +20,16 @@ class MemoryAudit:
 class RecordingServices:
     """A test double, not another registry or simulated persistence implementation."""
     def __init__(self): self.calls = []; self.result = {'state': 'inactive'}
+    def command_center(self, request, context, budget):
+        from mission_control.connection_contracts import COMMAND_STAGES
+        budget.check()
+        return dict(schema_revision=1,state='inactive',queues=[dict(stage=stage,count=0,blocked_count=0,items=[]) for stage in COMMAND_STAGES])
+    def eligibility(self, request, context, budget):
+        budget.check()
+        return dict(target_reference=request.resource_reference,requested_action=request.requested_action,
+            expected_revision=request.expected_revision,eligible=request.requested_action=='intake',
+            blocker_codes=[] if request.requested_action=='intake' else ['unresolved_dependencies'],
+            evaluated_at=datetime.now(timezone.utc).isoformat(),schema_revision=1)
     def execute(self, request, context, budget):
         self.calls.append(request);budget.check();return self.result
 
