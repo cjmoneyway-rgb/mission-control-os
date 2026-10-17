@@ -236,3 +236,77 @@ def validate_projection(value):
     check(value)
     if len(canonical_bytes(value)) > MAX_RESPONSE_BYTES // 2: raise ValueError('Projection too large')
     return canonical(value)
+
+# Governed Phase 2C read contracts. No new persistence or operational surface.
+COMMAND_ITEM_FIELDS = frozenset({'reference','current_stage','original_classification',
+    'owning_department_reference','priority','technical_status','dependency_state','risk_state',
+    'approval_state','assigned_owner_reference','next_required_action','outcome_evidence_reference',
+    'revision','last_authorized_update','history_references'})
+ELIGIBILITY_FIELDS = frozenset({'target_reference','requested_action','eligible','blocker_codes',
+    'expected_revision','evaluated_at','schema_revision'})
+BLOCKER_CODES = frozenset({'unresolved_dependencies','unresolved_approval','stale_revision',
+    'authorization_denied','unsupported_action','eligibility_unavailable'})
+
+
+def _projection_time(value):
+    if type(value) is not str or len(value)>40:
+        raise ValueError('Bounded aware time required')
+    instant=datetime.fromisoformat(value)
+    if instant.tzinfo is None or instant.utcoffset() is None:
+        raise ValueError('Aware time required')
+
+
+def validate_command_center(value):
+    if type(value) is not dict or set(value)!={'schema_revision','state','queues'}:
+        raise ValueError('Exact governed projection required')
+    if type(value['schema_revision']) is not int or value['schema_revision']!=1 or value['state']!='inactive':
+        raise ValueError('Inactive versioned projection required')
+    queues=value['queues']
+    if type(queues) is not list or len(queues)!=6:
+        raise ValueError('Six queues required')
+    for queue,stage in zip(queues,COMMAND_STAGES):
+        if type(queue) is not dict or set(queue)!={'stage','count','blocked_count','items'} or queue['stage']!=stage:
+            raise ValueError('Exact ordered queue required')
+        items=queue['items']
+        if type(items) is not list or len(items)>128 or type(queue['count']) is not int or queue['count']!=len(items):
+            raise ValueError('Authorized bounded count required')
+        blocked=0
+        for item in items:
+            if type(item) is not dict or set(item)!=COMMAND_ITEM_FIELDS or item['current_stage']!=stage:
+                raise ValueError('Exact minimized item required')
+            for key in ('reference','original_classification'):
+                ref(item[key])
+            for key in ('owning_department_reference','assigned_owner_reference','next_required_action','outcome_evidence_reference'):
+                if item[key] is not None:ref(item[key])
+            if item['priority'] not in (None,'syn-low','syn-normal','syn-high') or item['technical_status'] not in ('inactive','proposed','accepted','blocked'):
+                raise ValueError('Synthetic technical state required')
+            if item['dependency_state'] not in ('resolved','unresolved') or item['risk_state'] not in ('unresolved','indicated') or item['approval_state'] not in ('unresolved','synthetic_verified','not_required'):
+                raise ValueError('Explicit governed state required')
+            if type(item['revision']) is not int or item['revision']<0:raise ValueError('Exact revision required')
+            if item['last_authorized_update'] is not None:_projection_time(item['last_authorized_update'])
+            if type(item['history_references']) is not list:raise ValueError('History references required')
+            refs(tuple(item['history_references']),False)
+            blocked+=item['technical_status']=='blocked' or item['dependency_state']=='unresolved' or item['approval_state']=='unresolved'
+        if type(queue['blocked_count']) is not int or queue['blocked_count']!=blocked:
+            raise ValueError('Exact blocked count required')
+    if len(canonical_bytes(value))>MAX_RESPONSE_BYTES//2:raise ValueError('Bounded projection required')
+    return canonical(value)
+
+
+def validate_eligibility(value,request=None):
+    if type(value) is not dict or set(value)!=ELIGIBILITY_FIELDS:
+        raise ValueError('Exact eligibility required')
+    ref(value['target_reference'])
+    if value['requested_action'] not in WRITE_ACTIONS or type(value['eligible']) is not bool:
+        raise ValueError('Supported synthetic eligibility required')
+    if type(value['blocker_codes']) is not list or not set(value['blocker_codes'])<=BLOCKER_CODES:
+        raise ValueError('Sanitized blockers required')
+    if value['eligible'] != (not value['blocker_codes']):raise ValueError('Eligibility mismatch')
+    if type(value['expected_revision']) is not int or value['expected_revision']<0 or type(value['schema_revision']) is not int or value['schema_revision']!=1:
+        raise ValueError('Exact eligibility revisions required')
+    _projection_time(value['evaluated_at'])
+    if abs((datetime.now(timezone.utc)-datetime.fromisoformat(value['evaluated_at'])).total_seconds())>5:
+        raise ValueError('Fresh eligibility required')
+    if request is not None and (value['target_reference'],value['requested_action'],value['expected_revision'])!=(request.resource_reference,request.requested_action,request.expected_revision):
+        raise ValueError('Eligibility binding mismatch')
+    return canonical(value)

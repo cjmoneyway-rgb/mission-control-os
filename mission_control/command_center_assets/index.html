@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CEO Command Center · Mission Control OS™</title>
+  <link rel="stylesheet" href="/command-center/app.css">
+  <script src="/command-center/app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#workspace">Skip to workspace</a>
+  <aside class="rail" aria-label="Workspace navigation">
+    <a class="brand" href="#workspace"><span class="brand-mark">M</span> MISSION CONTROL OS™ <small>OPERATING SYSTEM</small></a>
+    <div class="rail-label">EXECUTIVE WORKSPACE</div>
+    <nav><a class="selected" href="#workspace" aria-current="page">Command Center <span>01</span></a><a href="#journey">Journey stages <span>02</span></a><a href="#boundaries">Access boundaries <span>03</span></a></nav>
+    <div class="rail-footer"><span class="dot"></span> LOCAL SYNTHETIC<br><small>Read-only review environment</small></div>
+  </aside>
+  <main id="workspace">
+    <header class="topbar"><span>WORKSPACE / CEO COMMAND CENTER</span><span class="pill">SYNTHETIC DATA ONLY</span></header>
+    <section class="intro"><p class="eyebrow">THE EXECUTIVE VIEW</p><h1>Clarity before action.</h1><p>Review authorized synthetic references, their preserved classifications, and append-only journey history. Every operational action remains inactive.</p></section>
+    <div class="metrics" aria-label="Environment boundaries"><div><span>Operating state</span><strong>Inactive <i class="dot"></i></strong></div><div><span>Interface access</span><strong>Read only</strong></div><div><span>Enabled connectors</span><strong>0 <small>/ 7</small></strong></div><div><span>Dataset</span><strong>Synthetic</strong></div></div>
+    <section class="panel" aria-labelledby="view-heading"><div class="section-head"><div><p class="eyebrow">01 / AUTHORIZED VISIBILITY</p><h2 id="view-heading">Executive overview</h2></div><span class="pill muted">COMMAND AUDIENCE</span></div>
+      <p class="hint">Identity is installed by the local synthetic server. No login, browser token, tenant selector, or approval role is available.</p>
+      <div class="actions"><button id="refresh" type="button">Load authorized overview</button><button id="clear" class="secondary" type="button">Clear view</button></div>
+      <div id="status" class="status" role="status" aria-live="polite" aria-atomic="true" tabindex="-1">Loading the authorized overview…</div>
+      <div id="counts" class="counts" aria-label="Server-projected overview counts"></div>
+      <section aria-labelledby="records-heading"><h3 id="records-heading">Authorized reference views</h3><div class="table-scroll"><table><caption>Minimized authorized projections. Unavailable fields remain unresolved.</caption><thead><tr><th scope="col">Reference</th><th scope="col">Original classification</th><th scope="col">Technical state</th><th scope="col">Revision</th><th scope="col">Current stage</th></tr></thead><tbody id="records"></tbody></table></div><div id="details"></div></section>
+      <form id="action-form"><fieldset><legend>Optional synthetic action</legend><label for="action">Server-admitted action</label><select id="action" name="action" aria-describedby="action-error"><option value="">No action selected — read only</option></select><p id="action-error" class="hint">Actions use server-installed synthetic fixtures only. Current server-calculated eligibility is required; unresolved prerequisites block confirmation.</p><button id="prepare" type="submit" disabled>Review synthetic action</button></fieldset></form>
+    </section>
+    <section id="journey" class="journey" aria-labelledby="journey-heading"><div class="section-head"><div><p class="eyebrow">02 / JOURNEY FRAMEWORK</p><h2 id="journey-heading">From information to measurement.</h2></div><span class="caption">Governed synthetic queues</span></div><p class="section-note">These are authorized record views, not exclusive lifecycle transitions or organizational approvals. Unknown values remain explicit.</p>
+      <ol class="stages"><li id="information"><span>01</span><h3>INFORMATION</h3><p>Intake &amp; source evidence</p><small>Unresolved</small></li><li id="intelligence"><span>02</span><h3>INTELLIGENCE</h3><p>Classification &amp; interpretation</p><small>Unresolved</small></li><li id="decision"><span>03</span><h3>DECISION</h3><p>Proposal &amp; approval evidence</p><small>Unresolved</small></li><li id="assignment"><span>04</span><h3>ASSIGNMENT</h3><p>Ownership &amp; acknowledgement</p><small>Unresolved</small></li><li id="execution"><span>05</span><h3>EXECUTION</h3><p>Inactive outcomes &amp; handoffs</p><small>Unresolved</small></li><li id="measurement"><span>06</span><h3>MEASUREMENT</h3><p>Outcomes &amp; interpretation</p><small>Unresolved</small></li></ol>
+    </section>
+    <section id="boundaries" class="boundary" aria-labelledby="boundary-heading"><div><p class="eyebrow">03 / ACCESS BOUNDARIES</p><h2 id="boundary-heading">Visibility carries no authority.</h2></div><p>All seven connectors are disabled. This interface offers only server-admitted, confirmation-gated inactive synthetic actions. It offers no organizational approvals, operational routing, publishing, external delivery, or pilot activation. Tenant, identity, revision, and visibility checks remain with the existing gateway and services.</p></section>
+    <dialog id="confirmation" aria-labelledby="confirmation-title" aria-describedby="confirmation-warning">
+      <h2 id="confirmation-title">Confirm synthetic action</h2>
+      <p id="confirmation-warning">This action remains synthetic and inactive. Technical validation is not organizational approval.</p>
+      <dl id="confirmation-details"></dl>
+      <form id="confirmation-form"><fieldset><legend>Explicit confirmation required</legend><label class="check"><input id="understood" type="checkbox" required> I understand this is a synthetic, inactive action.</label></fieldset><div class="actions"><button id="confirm" type="submit" disabled>Confirm synthetic action</button><button id="cancel" type="button" class="secondary">Cancel</button></div></form>
+    </dialog>
+    <footer>MISSION CONTROL OS <span>LOCAL CEO COMMAND CENTER · SYNTHETIC DEVELOPMENT</span></footer>
+  </main>
+</body>
+</html>

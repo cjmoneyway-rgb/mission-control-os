@@ -16,7 +16,7 @@ IMAGE = 'postgres:17.11-bookworm@sha256:3645570cccdfa447589da9f57dd740faa29b3093
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def main():
+def main(command=None):
     if os.name != 'posix' or os.geteuid() == 0 or os.environ.get('MC_SYN_CI_POSTGRES'):
         raise RuntimeError('Requires non-root POSIX local synthetic test context')
     subprocess.run(['docker','image','inspect',IMAGE],check=True,stdout=subprocess.DEVNULL)
@@ -37,7 +37,7 @@ def main():
                 wrapper.chmod(0o700)
             environment = dict(os.environ,PATH=directory+os.pathsep+os.environ['PATH'],
                                PYTHONDONTWRITEBYTECODE='1')
-            return subprocess.run([sys.executable,'-B',str(Path(__file__).resolve()),'--execute'],
+            return subprocess.run(command or [sys.executable,'-B',str(Path(__file__).resolve()),'--execute'],
                                   cwd=ROOT,env=environment).returncode
         finally:
             subprocess.run(['docker','rm','-f',name],check=False,stdout=subprocess.DEVNULL)
@@ -50,8 +50,8 @@ def verify():
     ids = {test.id() for test in flatten(suite)}
     pg = {identifier for identifier in ids if '_postgres.' in identifier or
           'test_postgres_integration.' in identifier}
-    if len(ids) != 373 or len(pg) != 167:
-        raise RuntimeError('Expected 373 tests including 167 PostgreSQL tests')
+    if len(ids) != 424 or len(pg) != 189:
+        raise RuntimeError('Expected 424 tests including 189 PostgreSQL tests')
     result = unittest.TextTestRunner(verbosity=2,resultclass=ExecutedResult).run(suite)
     counts = dict(discovered=len(ids),executed=result.testsRun,
         postgresql_executed=len(pg & set(result.executed_ids)),failures=len(result.failures),

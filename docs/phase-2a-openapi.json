@@ -4094,6 +4094,277 @@
             "minimum": 0
           }
         }
+      },
+      "GovernedCommandItem": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "reference",
+          "current_stage",
+          "original_classification",
+          "owning_department_reference",
+          "priority",
+          "technical_status",
+          "dependency_state",
+          "risk_state",
+          "approval_state",
+          "assigned_owner_reference",
+          "next_required_action",
+          "outcome_evidence_reference",
+          "revision",
+          "last_authorized_update",
+          "history_references"
+        ],
+        "properties": {
+          "reference": {
+            "type": "string",
+            "pattern": "^syn-[A-Za-z0-9_-]+$",
+            "maxLength": 128
+          },
+          "current_stage": {
+            "enum": [
+              "information",
+              "intelligence",
+              "decision",
+              "assignment",
+              "execution",
+              "measurement"
+            ]
+          },
+          "original_classification": {
+            "type": "string",
+            "pattern": "^syn-[A-Za-z0-9_-]+$",
+            "maxLength": 128
+          },
+          "owning_department_reference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^syn-[A-Za-z0-9_-]+$",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "priority": {
+            "enum": [
+              null,
+              "syn-low",
+              "syn-normal",
+              "syn-high"
+            ]
+          },
+          "technical_status": {
+            "enum": [
+              "inactive",
+              "proposed",
+              "accepted",
+              "blocked"
+            ]
+          },
+          "dependency_state": {
+            "enum": [
+              "resolved",
+              "unresolved"
+            ]
+          },
+          "risk_state": {
+            "enum": [
+              "unresolved",
+              "indicated"
+            ]
+          },
+          "approval_state": {
+            "enum": [
+              "unresolved",
+              "synthetic_verified",
+              "not_required"
+            ]
+          },
+          "assigned_owner_reference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^syn-[A-Za-z0-9_-]+$",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "next_required_action": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^syn-[A-Za-z0-9_-]+$",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "outcome_evidence_reference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^syn-[A-Za-z0-9_-]+$",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "last_authorized_update": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "history_references": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^syn-[A-Za-z0-9_-]+$",
+              "maxLength": 128
+            }
+          }
+        },
+        "description": "Internal browser-only minimized service contract. Nullable means unavailable; no raw payload, policy or approval evidence.",
+        "x-browser-only": true
+      },
+      "GovernedCommandCenter": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "schema_revision",
+          "state",
+          "queues"
+        ],
+        "properties": {
+          "schema_revision": {
+            "const": 1
+          },
+          "state": {
+            "const": "inactive"
+          },
+          "queues": {
+            "type": "array",
+            "minItems": 6,
+            "maxItems": 6,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "stage",
+                "count",
+                "blocked_count",
+                "items"
+              ],
+              "properties": {
+                "stage": {
+                  "enum": [
+                    "information",
+                    "intelligence",
+                    "decision",
+                    "assignment",
+                    "execution",
+                    "measurement"
+                  ]
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "blocked_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "items": {
+                  "type": "array",
+                  "maxItems": 128,
+                  "items": {
+                    "$ref": "#/components/schemas/GovernedCommandItem"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Internal browser-only projection. Exact six-stage order and authorized counts are additionally enforced in code; no operational/public endpoint is added.",
+        "x-browser-only": true
+      },
+      "SyntheticActionEligibility": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "target_reference",
+          "requested_action",
+          "eligible",
+          "blocker_codes",
+          "expected_revision",
+          "evaluated_at",
+          "schema_revision"
+        ],
+        "properties": {
+          "target_reference": {
+            "type": "string",
+            "pattern": "^syn-[A-Za-z0-9_-]+$",
+            "maxLength": 128
+          },
+          "requested_action": {
+            "enum": [
+              "intake",
+              "decision.submit",
+              "work-packet.create",
+              "assignment.acknowledge",
+              "handoff.record",
+              "outcome.record"
+            ]
+          },
+          "eligible": {
+            "type": "boolean"
+          },
+          "blocker_codes": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "unresolved_dependencies",
+                "unresolved_approval",
+                "stale_revision",
+                "authorization_denied",
+                "unsupported_action",
+                "eligibility_unavailable"
+              ]
+            }
+          },
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "evaluated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "schema_revision": {
+            "const": 1
+          }
+        },
+        "description": "Server-calculated, short-lived internal browser-only eligibility. It is neither organizational approval nor a mutation capability. Recomputed before dispatch and prerequisites repeated in the actual transaction.",
+        "x-browser-only": true
       }
     },
     "securitySchemes": {
