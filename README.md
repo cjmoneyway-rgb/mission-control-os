@@ -283,6 +283,20 @@ operational records require a protected data store and approved identity,
 permissions, and evidence authority before implementation. Those decisions remain
 unresolved; no real assignments or organizational records are supplied here.
 
+### Phase 1B–1E governed foundations
+
+Later phases extend the same application with protected-registry contracts,
+PostgreSQL persistence proofs, a revision-controlled department registry, inactive
+routing, a complete 16-stage synthetic podcast-guest lifecycle and Phase 1E
+production-readiness gates. See the documents in `docs/` for their exact security
+boundaries. These foundations remain synthetic and inactive; they do not configure
+production identity, confidential storage, operational routing or integrations.
+
+Phase 1E requires exact current evidence for twelve production controls and binds a
+proposed pilot plan to the reviewed package revision and digest. A successful
+assessment reports synthetic technical readiness only. Operational authorization
+is unavailable and fails closed.
+
 ## Optional OpenAI provider — default-deny
 
 The Responses API implementation remains unverified against a live service.
@@ -303,9 +317,10 @@ API call or external integration is enabled by these instructions.
 
 ## Testing
 
-The merged Phase 1A suite contains **37 offline tests**, verified on Linux/POSIX.
-Tests use deterministic mocks, synthetic provider and approval fixtures, and a
-fake OpenAI SDK. They make no live API calls and require no real credentials:
+The current suite contains **277 tests**: 145 offline checks and 132 tests requiring
+the reviewed disposable PostgreSQL 17.11 workflow. Tests use deterministic mocks,
+synthetic identities and approvals, and a fake OpenAI SDK. They make no live API
+calls and require no real credentials:
 
 ```bash
 python -m unittest discover -s tests -v
@@ -316,6 +331,9 @@ strict confidence and provider-result validation, duplicate JSON keys, exact-rev
 approval and evidence failures, injected-provider bypass attempts, minimized audit
 metadata, concurrent append/retention, retention failures and process interruption,
 restrictive file modes, invalid lifecycle transitions, and duplicate event IDs.
+Later tests also cover PostgreSQL isolation, concurrency, complete archive/restore,
+the 16-stage synthetic guest lifecycle, exact readiness evidence and the inactive
+pilot-authorization plan.
 Passing these tests does not authorize external processing or operational routing.
 
 ## Repository map
@@ -335,10 +353,13 @@ mission-control-os/
 │   ├── config.py                   # Validated public department projections
 │   ├── models.py                   # Execution and routing data contracts
 │   ├── contracts.py                # Synthetic registry, approval, and lifecycle
+│   ├── readiness.py                # Phase 1E evidence and pilot-authorization gates
 │   ├── json_io.py                  # Strict JSON; rejects duplicate keys
 │   └── departments.json            # Public demo catalog; not a private registry
 ├── docs/
-│   └── phase-1a-security.md         # Boundaries, limitations, unresolved decisions
+│   ├── phase-1a-security.md         # Initial hardening boundaries
+│   ├── phase-1d-synthetic-podcast-pilot.md # Complete inactive pilot proof
+│   └── phase-1e-production-readiness.md # Pre-provisioning gates and decisions
 ├── examples/
 │   └── sample_request.txt          # Public demonstration directive
 └── tests/
@@ -347,23 +368,26 @@ mission-control-os/
     ├── test_engine.py              # Routing, review, and audit behavior
     ├── test_openai_provider.py     # Fake SDK contract; no live API validation
     ├── test_hardening.py           # Phase 1A fail-closed regressions
+    ├── test_production_readiness.py # Phase 1E evidence and launch-denial tests
     ├── test_precommit_corrections.py # Concurrency, evidence, parsing, provider gates
     └── hardening_support.py        # Synthetic test authorities and clearance
 ```
 
 ## Current verification boundary
 
-The offline CLI and synthetic security contracts are verified within the 37-test
-Linux/POSIX suite. Technical checks, department-scoped prompts, and in-memory
-journey history do not establish enterprise authorization, data isolation,
-factual correctness, or durable organizational memory.
+The offline CLI, synthetic PostgreSQL architecture, registry/routing contracts,
+inactive podcast lifecycle, complete synthetic archive and Phase 1E readiness gates
+are covered by the 277-test suite. Technical checks and synthetic evidence do not
+establish enterprise authorization, production data isolation, factual correctness
+or permission to admit confidential records.
 
 Live OpenAI execution remains **BUILT — VALIDATION REQUIRED** and default-deny;
 an API key alone does not change that boundary. No operational approval authority,
 confidential registry, production lifecycle routing, or guest pilot is activated.
 External CRM/Drive/Sheets writeback and the unified dashboard remain
-**ROADMAP — NOT OPERATIONAL**. Phase 1B and live integrations require separate
-authorization; this documentation does not begin them.
+**ROADMAP — NOT OPERATIONAL**. Provider selection, purchasing, provisioning,
+production identity/key custody, confidential data admission and pilot launch each
+require separate authorization; this documentation grants none of them.
 
 ## What we learned
 
@@ -377,8 +401,9 @@ Organizations grow.
 
 ## Roadmap
 
-- Complete technical validation of the prototype
-- Automated governance-review states
+- Verify and approve the production provider, identity, custody and recovery design
+- Provision an isolated environment and repeat all tests with synthetic data
+- Authorize and run one bounded, human-controlled confidential pilot
 - Deeper organizational memory
 - Additional executive and departmental specialists
 - CRM and relationship-management integration
