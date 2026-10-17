@@ -114,11 +114,14 @@ def verify():
     suite = unittest.defaultTestLoader.discover('tests',top_level_dir='.')
     ids = [test.id() for test in flatten(suite)]
     groups = {'tests.test_postgres_integration.PostgreSQLIntegrationTests.': 10,
-              'tests.test_routing_postgres.RoutingPostgreSQLTests.': 43}
+              'tests.test_routing_postgres.RoutingPostgreSQLTests.': 43,
+              'tests.test_pilot_postgres.PilotPostgreSQLTests.': 33,
+              'tests.test_pilot_archive_postgres.PilotArchivePostgreSQLTests.': 16,
+              'tests.test_pilot_archive_completeness_postgres.ArchiveCompletenessPostgreSQLTests.': 30}
     pg_ids = {identifier for identifier in ids if identifier.startswith(tuple(groups))}
-    if len(ids) != 159 or any(sum(identifier.startswith(prefix) for identifier in ids) != count
+    if len(ids) != 257 or any(sum(identifier.startswith(prefix) for identifier in ids) != count
                              for prefix,count in groups.items()):
-        raise RuntimeError('Expected exactly 159 tests including 53 PostgreSQL tests')
+        raise RuntimeError('Expected exactly 257 tests including 132 PostgreSQL tests')
     result = unittest.TextTestRunner(verbosity=2,resultclass=ExecutedResult).run(suite)
     counts = {'discovered':len(ids),'executed':result.testsRun,
               'postgresql_executed':len(pg_ids & set(result.executed_ids)),
@@ -129,7 +132,7 @@ def verify():
     if summary:
         with open(summary,'a') as handle:
             handle.write('### Synthetic test results\n\n```json\n'+json.dumps(counts,indent=2)+'\n```\n')
-    if (not result.wasSuccessful() or result.testsRun != 159 or counts['postgresql_executed'] != 53
+    if (not result.wasSuccessful() or result.testsRun != 257 or counts['postgresql_executed'] != 132
             or result.skipped or result.expectedFailures or result.unexpectedSuccesses):
         raise SystemExit(1)
 

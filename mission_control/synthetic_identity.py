@@ -36,6 +36,11 @@ ROLE_ACTIONS['policy_admin'].add('policy.reference.append')
 ROLE_ACTIONS['approval_issuer'].update({'registry.department.read','registry.rule.read',
     'approval.routing.issue','approval.routing.verify','approval.routing.revoke'})
 
+# Phase 1D adds no operational actions. Exact grants remain mandatory.
+for role in ('data_writer','service_writer'):
+    ROLE_ACTIONS[role].update({'journey.pilot.start','journey.pilot.propose','journey.pilot.advance','journey.pilot.read'})
+ROLE_ACTIONS['approval_issuer'].update({'approval.pilot.issue','approval.pilot.revoke'})
+
 
 def synthetic_reference(value):
     text(value)
@@ -101,6 +106,7 @@ class SyntheticGrant:
     action: str
     resource: str
     effect: str = 'deny'
+    subject_reference: str | None = None
 
 
 @dataclass(frozen=True)
@@ -123,6 +129,8 @@ class SyntheticPolicy:
             if type(grant) is not SyntheticGrant or grant.role not in ROLE_ACTIONS:
                 raise PermissionError('Unknown grant')
             synthetic_reference(grant.resource)
+            if grant.subject_reference is not None:
+                synthetic_reference(grant.subject_reference)
             if grant.action not in ROLE_ACTIONS[grant.role] or grant.effect not in ('allow', 'deny'):
                 raise PermissionError('Unsupported grant')
 
@@ -161,7 +169,8 @@ class SyntheticAuthority:
         session, policy = self.resolve(session_reference, tenant, revision)
         synthetic_reference(resource)
         matching = [grant for grant in policy.grants if grant.role in session.principal.roles
-                    and grant.action == action and grant.resource == resource]
+                    and grant.action == action and grant.resource == resource
+                    and grant.subject_reference in (None, session.principal.subject_reference)]
         if not matching or any(grant.effect == 'deny' for grant in matching):
             raise PermissionError('Synthetic permission denied')
         return session, policy
