@@ -2,13 +2,13 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Mission Control OS synthetic internal connection contract",
-    "version": "1.0.0",
-    "description": "HTTP-shaped in-process gateway; NO HTTP listener is implemented or started. GET request bodies describe local envelope arguments, not a deployed browser API. A future HTTP binding requires separate review. Byte/depth/duplicate-key checks and policy/domain validation remain authoritative beyond JSON Schema."
+    "version": "1.1.0",
+    "description": "Phase 2B opt-in synthetic IPv4-loopback HTTP binding around the Phase 2A gateway. Disabled by default. GET uses a required UTF-8 JSON envelope body; no query, cookie, browser CORS, forwarded identity or production authentication. Requires explicit synthetic-development startup and server-installed ephemeral bearer bindings. Domain policy and schema validation remain authoritative."
   },
   "servers": [
     {
       "url": "http://127.0.0.1",
-      "description": "Reserved localhost contract only; no endpoint is bound or published."
+      "description": "Literal IPv4 loopback only; startup chooses an ephemeral port. No deployment or public endpoint."
     }
   ],
   "paths": {
@@ -87,7 +87,7 @@
             }
           },
           "408": {
-            "description": "Sanitized technical denial or error",
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -118,6 +118,66 @@
           },
           "503": {
             "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "411": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "417": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "431": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -204,7 +264,7 @@
             }
           },
           "408": {
-            "description": "Sanitized technical denial or error",
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -235,6 +295,66 @@
           },
           "503": {
             "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "411": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "417": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "431": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -321,7 +441,7 @@
             }
           },
           "408": {
-            "description": "Sanitized technical denial or error",
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -352,6 +472,66 @@
           },
           "503": {
             "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "411": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "417": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "431": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -438,7 +618,7 @@
             }
           },
           "408": {
-            "description": "Sanitized technical denial or error",
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -469,6 +649,66 @@
           },
           "503": {
             "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "411": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "417": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "431": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -555,7 +795,7 @@
             }
           },
           "408": {
-            "description": "Sanitized technical denial or error",
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -586,6 +826,66 @@
           },
           "503": {
             "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "411": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "417": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "431": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -683,7 +983,7 @@
             }
           },
           "408": {
-            "description": "Sanitized technical denial or error",
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -714,6 +1014,66 @@
           },
           "503": {
             "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "411": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "417": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "431": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -800,7 +1160,7 @@
             }
           },
           "408": {
-            "description": "Sanitized technical denial or error",
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -831,6 +1191,66 @@
           },
           "503": {
             "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "411": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "417": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "431": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -917,7 +1337,7 @@
             }
           },
           "408": {
-            "description": "Sanitized technical denial or error",
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -948,6 +1368,66 @@
           },
           "503": {
             "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "411": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "417": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "431": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -1034,7 +1514,7 @@
             }
           },
           "408": {
-            "description": "Sanitized technical denial or error",
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -1065,6 +1545,66 @@
           },
           "503": {
             "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "411": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "417": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "431": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -1151,7 +1691,7 @@
             }
           },
           "408": {
-            "description": "Sanitized technical denial or error",
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -1182,6 +1722,66 @@
           },
           "503": {
             "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "411": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "417": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "431": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -1279,7 +1879,7 @@
             }
           },
           "408": {
-            "description": "Sanitized technical denial or error",
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -1310,6 +1910,66 @@
           },
           "503": {
             "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "411": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "417": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "431": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -1396,7 +2056,7 @@
             }
           },
           "408": {
-            "description": "Sanitized technical denial or error",
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -1427,6 +2087,66 @@
           },
           "503": {
             "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "411": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "417": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "431": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -1513,7 +2233,7 @@
             }
           },
           "408": {
-            "description": "Sanitized technical denial or error",
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -1544,6 +2264,66 @@
           },
           "503": {
             "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "411": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "417": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "431": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -1630,7 +2410,7 @@
             }
           },
           "408": {
-            "description": "Sanitized technical denial or error",
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -1661,6 +2441,66 @@
           },
           "503": {
             "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "411": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "417": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "431": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -1747,7 +2587,7 @@
             }
           },
           "408": {
-            "description": "Sanitized technical denial or error",
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
             "content": {
               "application/json": {
                 "schema": {
@@ -1785,8 +2625,266 @@
                 }
               }
             }
+          },
+          "405": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "411": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "417": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "431": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
+      }
+    },
+    "/v1/command-center": {
+      "get": {
+        "operationId": "command_center_get",
+        "summary": "CEO command visibility via existing Phase 2A projection",
+        "security": [
+          {
+            "SyntheticFixtureContext": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ConnectionRequest"
+                  },
+                  {
+                    "properties": {
+                      "requested_action": {
+                        "const": "visibility.project"
+                      },
+                      "payload": {
+                        "$ref": "#/components/schemas/visibility.projectPayload"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "payload": {
+                        "type": "object",
+                        "properties": {
+                          "audience": {
+                            "const": "command"
+                          },
+                          "team_reference": {
+                            "type": "null"
+                          }
+                        },
+                        "required": [
+                          "audience",
+                          "team_reference"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inactive projection; no operational authority",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "408": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Sanitized technical denial or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "411": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "417": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "431": {
+            "description": "Sanitized HTTP boundary denial; inactive and operational_authorized false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "description": "Alias of GET /v1/visibility; requires visibility.project with audience command and team_reference null. Existing exact packet policy, tenant, correlation and revision checks remain authoritative. No invented stages, owners or metrics."
       }
     }
   },
@@ -3000,14 +4098,25 @@
     },
     "securitySchemes": {
       "SyntheticFixtureContext": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "X-Synthetic-Context-Reference",
-        "description": "Reserved future local binding, NOT an API key implementation. A header or opaque reference alone is never authentication; Gateway.handle requires a separately trusted LocalContext and verifier. No HTTP header adapter exists."
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Ephemeral synthetic token installed by trusted startup, mapped server-side to a LocalContext. Not production authentication. Actor, session, tenant and policy are independently verified by Phase 2A. Never log tokens."
       }
     }
   },
   "x-max-request-bytes": 65536,
   "x-max-response-bytes": 65536,
-  "x-no-operational-adapters": true
+  "x-no-operational-adapters": true,
+  "x-http-boundary": {
+    "max-header-bytes": 8192,
+    "max-request-bytes": 65536,
+    "connection": "close",
+    "cors": "denied",
+    "content-encoding": "none",
+    "content-type": "application/json or application/json; charset=utf-8",
+    "timeout-seconds-default": 2,
+    "timeout-seconds-max": 5,
+    "domain-timeout": "cooperative; no arbitrary Python preemption",
+    "host": "exact bound literal IPv4 address and port"
+  }
 }
