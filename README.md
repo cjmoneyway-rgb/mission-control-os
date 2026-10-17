@@ -305,6 +305,15 @@ and unresolved production decisions. Phase 1 extends this existing system; synth
 verification does not authorize production deployment, confidential data, integrations
 or an operational pilot. No release or tag is created by this closeout.
 
+## Phase 2A local connection-layer proposal
+
+The [internal connection-layer proposal](docs/phase-2a-internal-connection-layer.md)
+adds a synthetic in-process gateway, [OpenAPI contract](docs/phase-2a-openapi.json),
+and a thin adapter to existing Phase 1 services. It starts no HTTP listener and
+connects no external application. Connector descriptors stay disabled; outbox
+intentions cannot transmit. Production identity, transport, confidential data,
+integrations and operational authorization remain separately gated.
+
 ## Optional OpenAI provider — default-deny
 
 The Responses API implementation remains unverified against a live service.
@@ -325,7 +334,7 @@ API call or external integration is enabled by these instructions.
 
 ## Testing
 
-The current suite contains **277 tests**: 145 offline checks and 132 tests requiring
+The current suite contains **342 tests**: 185 offline checks and 157 tests requiring
 the reviewed disposable PostgreSQL 17.11 workflow. Tests use deterministic mocks,
 synthetic identities and approvals, and a fake OpenAI SDK. They make no live API
 calls and require no real credentials:
@@ -341,7 +350,8 @@ metadata, concurrent append/retention, retention failures and process interrupti
 restrictive file modes, invalid lifecycle transitions, and duplicate event IDs.
 Later tests also cover PostgreSQL isolation, concurrency, complete archive/restore,
 the 16-stage synthetic guest lifecycle, exact readiness evidence and the inactive
-pilot-authorization plan.
+pilot-authorization plan. Phase 2A adds strict local gateway, admission, connector,
+transaction, visibility and interruption tests.
 Passing these tests does not authorize external processing or operational routing.
 
 ## Repository map
@@ -385,7 +395,7 @@ mission-control-os/
 
 The offline CLI, synthetic PostgreSQL architecture, registry/routing contracts,
 inactive podcast lifecycle, complete synthetic archive and Phase 1E readiness gates
-are covered by the 277-test suite. Technical checks and synthetic evidence do not
+are covered by the 342-test suite. Technical checks and synthetic evidence do not
 establish enterprise authorization, production data isolation, factual correctness
 or permission to admit confidential records.
 
