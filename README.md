@@ -297,6 +297,14 @@ proposed pilot plan to the reviewed package revision and digest. A successful
 assessment reports synthetic technical readiness only. Operational authorization
 is unavailable and fails closed.
 
+## Phase 1 closeout and release candidate
+
+See the [Phase 1 closeout and release-candidate boundaries](docs/phase-1-closeout-release-candidate.md)
+for merged PR/commit evidence, final synthetic verification, implemented capabilities
+and unresolved production decisions. Phase 1 extends this existing system; synthetic
+verification does not authorize production deployment, confidential data, integrations
+or an operational pilot. No release or tag is created by this closeout.
+
 ## Optional OpenAI provider — default-deny
 
 The Responses API implementation remains unverified against a live service.
