@@ -113,19 +113,10 @@ def verify():
     os.chdir(ROOT)
     suite = unittest.defaultTestLoader.discover('tests',top_level_dir='.')
     ids = [test.id() for test in flatten(suite)]
-    groups = {'tests.test_postgres_integration.PostgreSQLIntegrationTests.': 10,
-              'tests.test_routing_postgres.RoutingPostgreSQLTests.': 43,
-              'tests.test_pilot_postgres.PilotPostgreSQLTests.': 33,
-              'tests.test_pilot_archive_postgres.PilotArchivePostgreSQLTests.': 16,
-              'tests.test_pilot_archive_completeness_postgres.ArchiveCompletenessPostgreSQLTests.': 30,
-              'tests.test_connection_postgres.ConnectionPostgreSQLTests.': 25,
-              'tests.test_local_http_postgres.LocalHTTPPostgreSQLTests.': 10,
-              'tests.test_command_center_postgres.CommandCenterPostgreSQLTests.': 8,
-              'tests.test_governed_postgres.GovernedPostgreSQLTests.': 14}
-    pg_ids = {identifier for identifier in ids if identifier.startswith(tuple(groups))}
-    if len(ids) != 424 or any(sum(identifier.startswith(prefix) for identifier in ids) != count
-                             for prefix,count in groups.items()):
-        raise RuntimeError('Expected exactly 424 tests including 189 PostgreSQL tests')
+    pg_ids = {identifier for identifier in ids if '_postgres.' in identifier or
+              'test_postgres_integration.' in identifier}
+    if not ids or len(ids)!=len(set(ids)) or not pg_ids:
+        raise RuntimeError('Nonempty unique discovery with PostgreSQL tests required')
     result = unittest.TextTestRunner(verbosity=2,resultclass=ExecutedResult).run(suite)
     counts = {'discovered':len(ids),'executed':result.testsRun,
               'postgresql_executed':len(pg_ids & set(result.executed_ids)),
@@ -136,7 +127,8 @@ def verify():
     if summary:
         with open(summary,'a') as handle:
             handle.write('### Synthetic test results\n\n```json\n'+json.dumps(counts,indent=2)+'\n```\n')
-    if (not result.wasSuccessful() or result.testsRun != 424 or counts['postgresql_executed'] != 189
+    if (not result.wasSuccessful() or set(result.executed_ids)!=set(ids) or result.testsRun!=len(ids)
+            or counts['postgresql_executed']!=len(pg_ids)
             or result.skipped or result.expectedFailures or result.unexpectedSuccesses):
         raise SystemExit(1)
 

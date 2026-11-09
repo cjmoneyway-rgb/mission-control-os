@@ -112,7 +112,7 @@
   });});
   $('understood').addEventListener('change',()=>{$('confirm').disabled=busy||!$('understood').checked;});
   $('cancel').addEventListener('click',()=>{$('confirmation').close();confirmation=null;$('prepare').focus();});
-  $('confirmation').addEventListener('cancel',()=>{confirmation=null;});
+  $('confirmation').addEventListener('cancel',event=>{event.preventDefault();confirmation=null;$('confirmation').close();$('prepare').focus();});
   $('confirmation-form').addEventListener('submit',event=>{
     event.preventDefault();if(busy||!confirmation||!$('understood').checked)return;
     const value=confirmation;confirmation=null;$('confirmation').close();
