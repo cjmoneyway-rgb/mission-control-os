@@ -517,3 +517,20 @@ acceptance plan and CEO decision register. It is documentation-only: all seven
 connectors remain disabled, confidential-data admission and production use remain
 blocked, and the 2nd Brain is not implemented. Follow-up implementation requires
 separate CEO authorization. No services or integration tests run for the assessment.
+
+### Phase 2E synthetic identity/session contracts
+
+The [identity architecture](docs/phase-2e-identity-architecture.md) and
+[contract specification](docs/phase-2e-identity-session-contracts.md) describe
+provider-neutral synthetic metadata, stable subject IDs, bounded session and
+revocation/reauthentication contracts, minimized decisions and opt-in compatibility
+checks. Existing identity, policy, HTTP, UI, domain and approval controls remain
+mandatory. No login, production identity provider, credential, persistent session
+schema or integration is introduced; all seven connectors remain disabled.
+
+```sh
+python -B scripts/demo_identity_sessions.py --synthetic-development
+```
+
+This deterministic tokenless demo opens no listener/database/provider connection.
+Production authority and later Phase 2E work remain separately gated.
