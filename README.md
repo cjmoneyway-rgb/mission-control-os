@@ -334,13 +334,13 @@ API call or external integration is enabled by these instructions.
 
 ## Testing
 
-The current suite contains **342 tests**: 185 offline checks and 157 tests requiring
+The suite includes offline checks and tests requiring
 the reviewed disposable PostgreSQL 17.11 workflow. Tests use deterministic mocks,
 synthetic identities and approvals, and a fake OpenAI SDK. They make no live API
 calls and require no real credentials:
 
 ```bash
-python -m unittest discover -s tests -v
+python -B scripts/local_postgres_tests.py
 ```
 
 The suite covers routing and fallback, blocked final governance, CLI rejection,
@@ -407,7 +407,7 @@ mission-control-os/
 
 The offline CLI, synthetic PostgreSQL architecture, registry/routing contracts,
 inactive podcast lifecycle, complete synthetic archive and Phase 1E readiness gates
-are covered by the 424-test suite, including 189 PostgreSQL tests. Technical checks and synthetic evidence do not
+are covered by the discovered suite, including disposable PostgreSQL tests. Technical checks and synthetic evidence do not
 establish enterprise authorization, production data isolation, factual correctness
 or permission to admit confidential records.
 
@@ -482,3 +482,28 @@ history, without a new store or migration. This is synthetic and not production-
 technical eligibility is not organizational approval. Automated accessibility and
 keyboard checks pass; manual assistive-technology review remains required before
 production or confidential use. Demonstrations stop their temporary listeners.
+
+
+### Phase 2D local operator launch and evaluation
+
+The [local operator runbook](docs/phase-2d-local-operator-launch.md) describes one
+explicit entry point to start, verify, open and stop the existing synthetic CEO
+Command Center. From an activated development environment:
+
+```sh
+python -B -m mission_control.local_operator demo --synthetic-development
+python -B -m mission_control.local_operator start --synthetic-development
+python -B -m mission_control.local_operator check
+python -B -m mission_control.local_operator open --browser
+python -B -m mission_control.local_operator stop
+```
+
+LOCAL · SYNTHETIC · NOT PRODUCTION · NO ORGANIZATIONAL AUTHORIZATION. Startup is
+manual, literal `127.0.0.1` only, with an ephemeral port and disposable synthetic
+PostgreSQL. Browser opening is explicit. The operator profile is read-only; all
+seven connectors remain disabled. Linux is verified; macOS requires manual
+qualification as documented, and Windows is unsupported.
+
+Additional repository entries: `mission_control/local_operator.py` (operator,
+private control and process lifecycle), `tests/test_local_operator.py` (offline
+security/transport), and `tests/test_operator_postgres.py` (real managed lifecycle).

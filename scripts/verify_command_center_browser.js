@@ -19,6 +19,20 @@ const path = require('node:path');
     await page.goto(origin+'/command-center');
     await page.getByRole('status').filter({hasText:'Empty:'}).waitFor();
     assert.equal(await page.locator('h1').count(),1);
+    assert.equal(await page.getByRole('main').count(),1);
+    assert.equal(await page.getByRole('navigation').count(),1);
+    assert.equal(await page.locator('table caption').count(),1);
+    assert(await page.locator('thead th').evaluateAll(elements=>elements.every(e=>e.scope==='col')));
+    assert(await page.locator('input,select').evaluateAll(elements=>elements.every(e=>e.labels?.length && Array.from(e.labels).some(label=>label.textContent.trim()))));
+    assert.equal(await page.locator('#status').getAttribute('aria-live'),'polite');
+    await page.keyboard.press('Tab');
+    assert.equal(await page.locator('.skip:focus').count(),1);
+    assert(await page.locator('.skip').evaluate(e=>parseFloat(getComputedStyle(e).outlineWidth)>0));
+    await page.keyboard.press('Enter');assert.equal(new URL(page.url()).hash,'#workspace');
+    await page.locator('#refresh').focus();await page.keyboard.press('Tab');
+    assert.equal(await page.evaluate(()=>document.activeElement.id),'clear');
+    await page.keyboard.press('Shift+Tab');
+    assert.equal(await page.evaluate(()=>document.activeElement.id),'refresh');
     assert.deepEqual(await page.locator('.stages h3').allTextContents(),['INFORMATION','INTELLIGENCE','DECISION','ASSIGNMENT','EXECUTION','MEASUREMENT']);
     for(const stage of ['information','intelligence','decision','assignment','execution','measurement']) {
       await page.locator('#'+stage).scrollIntoViewIfNeeded();assert(await page.locator('#'+stage).isVisible());
@@ -32,6 +46,16 @@ const path = require('node:path');
     await page.locator('#confirmation[open]').waitFor();
     assert(await page.locator('#confirm').isDisabled());
     assert.equal(await page.evaluate(()=>document.activeElement.id),'understood');
+    await page.keyboard.press('Escape');assert(!(await page.locator('#confirmation').isVisible()));
+    await page.waitForFunction(()=>document.activeElement.id==='prepare');
+    assert.equal(await page.evaluate(()=>document.activeElement.id),'prepare');
+    await page.keyboard.press('Enter');await page.locator('#confirmation[open]').waitFor();
+    await page.keyboard.press('Tab');assert.equal(await page.evaluate(()=>document.activeElement.id),'cancel');
+    await page.keyboard.press('Enter');assert(!(await page.locator('#confirmation').isVisible()));
+    await page.waitForFunction(()=>document.activeElement.id==='prepare');
+    assert.equal(await page.evaluate(()=>document.activeElement.id),'prepare');
+    await page.keyboard.press('Enter');await page.locator('#confirmation[open]').waitFor();
+    assert(await page.locator('#confirm').isDisabled());
     await page.keyboard.press('Space');await page.keyboard.press('Tab');
     assert.equal(await page.evaluate(()=>document.activeElement.id),'confirm');
     await page.keyboard.press('Enter');
@@ -54,8 +78,20 @@ const path = require('node:path');
     assert.equal(await page.locator('#records img').count(),0);
     assert.equal(await page.evaluate(()=>window.injected),undefined);
     // The stylesheet and native controls remain usable at narrow widths and 200% layout zoom.
-    await page.setViewportSize({width:360,height:900});
-    assert(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth), 'layout overflow');
+    for(const width of [320,360,375,390,768,1280]) {
+      await page.setViewportSize({width,height:900});
+      const label=page.locator('.topbar .pill');
+      assert.equal(await label.textContent(),'LOCAL · SYNTHETIC · NOT PRODUCTION · NO ORGANIZATIONAL AUTHORIZATION');
+      await label.scrollIntoViewIfNeeded();assert(await label.isVisible());
+      const box=await label.evaluate(element=>{
+        const rect=element.getBoundingClientRect(),style=getComputedStyle(element);
+        return {top:rect.top,bottom:rect.bottom,left:rect.left,right:rect.right,width:rect.width,scroll:element.scrollWidth,
+          client:element.clientWidth,whiteSpace:style.whiteSpace,overflow:style.overflow,textOverflow:style.textOverflow};
+      });
+      assert(box.top>=0 && box.bottom<=900 && box.left>=0 && box.right<=width && box.scroll<=box.client+1,`boundary label overflow at ${width}`);
+      assert.equal(box.whiteSpace,'normal');assert.equal(box.overflow,'visible');assert.notEqual(box.textOverflow,'ellipsis');
+      assert(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),`document layout overflow at ${width}`);
+    }
     await page.setViewportSize({width:1280,height:960});
     await page.evaluate(()=>document.body.style.zoom='2');
     assert(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth), 'layout overflow');
@@ -80,6 +116,6 @@ const path = require('node:path');
     assert.deepEqual(contrastFailures,[]);
     assert.deepEqual(external,[]);assert.deepEqual(errors,[]);
     if(process.env.MC_UI_SCREENSHOT_DIR) await page.screenshot({path:path.join(process.env.MC_UI_SCREENSHOT_DIR,'command-center.png'),fullPage:true});
-    console.log('BROWSER PASS: Chromium; six stages; keyboard confirmation; empty/loaded/blocked states; refresh safety; escaping; HttpOnly strict cookie; no browser storage; no external requests; narrow/200% layout; visible text contrast; reduced motion.');
+    console.log('BROWSER PASS: Chromium; six stages; skip link; landmarks; labels; table headers; live status; visible focus; tab order; Escape/cancel focus restoration; keyboard confirmation; empty/loaded/blocked states; refresh safety; escaping; HttpOnly strict cookie; no browser storage; no external requests; 320/360/375/390/768/1280px full warning and document overflow; 200% layout; visible text contrast; reduced motion.');
   } catch(error) { console.error('Browser status:',await page.locator('#status').textContent());console.error('Script errors:',errors);console.error('Viewport',await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth,zoom:document.body.style.zoom})));throw error; } finally {await context.close();await browser.close();}
 })().catch(error=>{console.error(error.message);process.exitCode=1;});
