@@ -122,6 +122,22 @@ class Gateway:
         self.rate_limit, self.audit_sink = rate_limit, audit_sink
 
     def handle(self, method, path, raw, context=None):
+        # Optional trusted synthetic contract lease. Existing checks still run.
+        authority=getattr(self.gate,'authority',None)
+        guard=getattr(authority,'contract_guard',None)
+        if guard is None:return self._handle(method,path,raw,context)
+        try:
+            if type(context) is not LocalContext:raise PermissionError('Trusted context required')
+            from .identity_sessions import ContractGuard
+            if type(guard) is not ContractGuard:raise PermissionError('Untrusted contract guard')
+            binding=guard.bindings.get(context.session_reference)
+            if binding is None:raise PermissionError('Binding required')
+            with guard.lease(context.session_reference,binding.tenant_reference,context.policy_revision):
+                return self._handle(method,path,raw,context)
+        except PermissionError:return self._error(403,'denied')
+        except Exception:return self._error(503,'service_unavailable')
+
+    def _handle(self, method, path, raw, context=None):
         request = None
         try:
             if type(method) is not str or type(path) is not str or len(method)>8 or len(path)>256:

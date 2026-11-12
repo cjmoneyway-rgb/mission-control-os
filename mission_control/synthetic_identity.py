@@ -137,7 +137,11 @@ class SyntheticPolicy:
 
 class SyntheticAuthority:
     """Trusted test fixture, not caller-provided authentication claims."""
-    def __init__(self, sessions=None, policies=None):
+    def __init__(self, sessions=None, policies=None, contract_guard=None):
+        if contract_guard is not None:
+            from .identity_sessions import ContractGuard
+            if type(contract_guard) is not ContractGuard:raise PermissionError('Invalid synthetic contract guard')
+        self.contract_guard = contract_guard
         self.sessions = dict(sessions or {})
         self.policies = dict(policies or {})
 
@@ -161,6 +165,8 @@ class SyntheticAuthority:
             if len(duties) > 1:
                 raise PermissionError('Conflicting duties across sessions')
             policy.validate(tenant, revision)
+            if self.contract_guard is not None:
+                self.contract_guard.validate(session_reference,tenant,revision,session.principal)
             return session, policy
         except Exception:
             raise PermissionError('Synthetic identity or policy verification failed') from None
@@ -173,6 +179,8 @@ class SyntheticAuthority:
                     and grant.subject_reference in (None, session.principal.subject_reference)]
         if not matching or any(grant.effect == 'deny' for grant in matching):
             raise PermissionError('Synthetic permission denied')
+        if self.contract_guard is not None:
+            self.contract_guard.validate(session_reference,tenant,revision,session.principal,action,resource)
         return session, policy
 
 
