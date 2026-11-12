@@ -507,3 +507,13 @@ qualification as documented, and Windows is unsupported.
 Additional repository entries: `mission_control/local_operator.py` (operator,
 private control and process lifecycle), `tests/test_local_operator.py` (offline
 security/transport), and `tests/test_operator_postgres.py` (real managed lifecycle).
+
+### Phase 2E production-readiness and integration assessment
+
+The [Phase 2E assessment](docs/phase-2e-production-integration-readiness.md)
+contains the architecture/authority boundaries, seven-connector activation matrix,
+production gaps, HubSpot/2nd Brain impact, conditional November 30 roadmap,
+acceptance plan and CEO decision register. It is documentation-only: all seven
+connectors remain disabled, confidential-data admission and production use remain
+blocked, and the 2nd Brain is not implemented. Follow-up implementation requires
+separate CEO authorization. No services or integration tests run for the assessment.
