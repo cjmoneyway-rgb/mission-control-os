@@ -74,3 +74,13 @@ explicit future implementation/production gates with accountable roles and due
 windows. If evidence needed for an actual commitment cannot be obtained, keep that
 commitment conditional or deferred. CEO review decides the next scope; it does
 not retrospectively turn a synthetic proof into production authorization.
+
+## M2 review: decisions remain unresolved
+
+PR #16 delivered the authorized synthetic identity/session scope, not production
+D02/D03 completion. The [M2 options and blocked statuses](phase-2e-storage-recovery-audit-design.md#decision-options-and-explicit-blocked-status)
+retain D01/D03 ownership/custody, D04 hosting/recovery, D05 operations/audit,
+D06 data/retention and D09 capacity/platform decisions. No person, provider, key,
+region, budget, retention period or SLO is selected by these documents.
+The [tabletop results](phase-2e-operations-tabletop.md#result-ledger-and-limitations)
+are conditional design evidence, not human attestations or activation permission.

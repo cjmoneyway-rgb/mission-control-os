@@ -108,3 +108,13 @@ is Git ancestry/tree checks, source/AST/JSON/Markdown inspection, connector meta
 process/listener/container/file-presence checks and documentation consistency.
 No operational test evidence, production credentials or confidential samples are
 created. The final review separates current static validation from future execution.
+
+## M2 design-only acceptance evidence
+
+See the [M2 acceptance map](phase-2e-storage-recovery-audit-design.md#acceptance-and-evidence-map)
+and [TT-01 through TT-09](phase-2e-operations-tabletop.md). AT-04 custody,
+AT-05–08 storage/audit/admission, AT-12 reconciliation, AT-13 incidents and AT-16
+completeness are mapped to nine conditional-pass paper cases. No hosted recovery,
+production security, actual alert response or functional test was executed.
+The rollback matrix above still governs; technical restore never authorizes
+restart, unknown outcomes never authorize blind replay, and history is preserved.

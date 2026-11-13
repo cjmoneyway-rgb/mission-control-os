@@ -534,3 +534,12 @@ python -B scripts/demo_identity_sessions.py --synthetic-development
 
 This deterministic tokenless demo opens no listener/database/provider connection.
 Production authority and later Phase 2E work remain separately gated.
+
+### Phase 2E M2 storage and operations design
+
+The [storage/recovery/audit design](docs/phase-2e-storage-recovery-audit-design.md)
+and [synthetic operations tabletops](docs/phase-2e-operations-tabletop.md) specify
+protected storage, independent custody, recovery reconciliation and human restart
+gates. Nine paper scenarios are conditional design evidence only; no hosted drill
+or functional test runs for this documentation-only scope. All seven connectors
+remain disabled and production/admission decisions remain blocked.

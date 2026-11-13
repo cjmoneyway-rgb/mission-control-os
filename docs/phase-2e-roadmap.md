@@ -98,3 +98,13 @@ release authority even if all automation tests pass.
 Scope it first to reviewed contracts and synthetic negative tests, preserving all
 existing local restrictions. See D10 before beginning any implementation. The
 2nd Brain is explicitly excluded from that branch.
+
+## Sequence status after PR #16
+
+M1 synthetic identity/session contracts are merged at
+`4f8adb93b1931f06c5819a02779b9107c1f30c8d`; real identity/MFA and custody
+remain unverified. M2 is now documented in the
+[storage/recovery/audit design](phase-2e-storage-recovery-audit-design.md) and
+[tabletop ledger](phase-2e-operations-tabletop.md), pending CEO review.
+This does not close production gates or authorize M3. November windows remain
+conditional planning targets; no dates, owners or operational SLOs are granted.
