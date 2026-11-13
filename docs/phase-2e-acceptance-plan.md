@@ -118,3 +118,10 @@ completeness are mapped to nine conditional-pass paper cases. No hosted recovery
 production security, actual alert response or functional test was executed.
 The rollback matrix above still governs; technical restore never authorizes
 restart, unknown outcomes never authorize blind replay, and history is preserved.
+
+## M3 bounded proof scope
+
+[M3 contract and acceptance map](phase-2e-hubspot-mocked-projection.md#demonstration-and-acceptance)
+cover AT-01–03, AT-07–08, AT-10–12, AT-15 and AT-16 with fictional fixtures and
+existing identity/authorization. No vendor signature, durable delivery/recovery,
+confidential admission, production identity or real erasure proof is claimed.

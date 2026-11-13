@@ -108,3 +108,10 @@ remain unverified. M2 is now documented in the
 [tabletop ledger](phase-2e-operations-tabletop.md), pending CEO review.
 This does not close production gates or authorize M3. November windows remain
 conditional planning targets; no dates, owners or operational SLOs are granted.
+
+## M3 synthetic implementation review
+
+After merged M2 PR #17 at `79ab81bdb7edb37ca106b36bfb4bbd148cf348b9`, the
+[M3 contract](phase-2e-hubspot-mocked-projection.md) implements only the conditional
+fictional contact/company slice. No live read or deal/lifecycle properties are
+included. Dates remain conditional; vendor/admission/custody gates are not closed.
