@@ -543,3 +543,15 @@ protected storage, independent custody, recovery reconciliation and human restar
 gates. Nine paper scenarios are conditional design evidence only; no hosted drill
 or functional test runs for this documentation-only scope. All seven connectors
 remain disabled and production/admission decisions remain blocked.
+
+### Phase 2E M3 fictional commercial projection
+
+The [mocked HubSpot contract](docs/phase-2e-hubspot-mocked-projection.md) validates
+installed fictional contact/company observations under existing M1 identity and
+exact read grants. It demonstrates freshness, replay conflicts, merges, tombstones
+and source withdrawal in memory. No API, route, database, credential or network
+capability is added; `syn-hubspot` and all six other connectors remain disabled.
+
+```sh
+python -B scripts/demo_hubspot_projection.py --synthetic-development
+```

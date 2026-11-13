@@ -190,3 +190,10 @@ The [storage/recovery/audit design](phase-2e-storage-recovery-audit-design.md)
 and [nine synthetic tabletop cases](phase-2e-operations-tabletop.md) document
 roadmap M2 after merged PR #16. They add no executable behavior or production
 evidence; hosting, custody, staffing, admission and restart remain blocked.
+
+## M3 fictional contract follow-up
+
+The [M3 mock](phase-2e-hubspot-mocked-projection.md) adds process-local fictional
+contact/company projection contracts and offline negative tests only. M1/M2
+boundaries, exact operational denial and all seven disabled connectors remain.
+No real HubSpot read, credential, data admission or vendor proof is supplied.

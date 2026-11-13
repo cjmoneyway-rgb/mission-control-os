@@ -84,3 +84,12 @@ D06 data/retention and D09 capacity/platform decisions. No person, provider, key
 region, budget, retention period or SLO is selected by these documents.
 The [tabletop results](phase-2e-operations-tabletop.md#result-ledger-and-limitations)
 are conditional design evidence, not human attestations or activation permission.
+
+## M3 scope and unresolved decisions
+
+The [fictional projection implementation](phase-2e-hubspot-mocked-projection.md)
+uses only approved synthetic contacts/companies, existing read grants and M1
+sessions. D01/D03 assignments/custody, D06 admission/retention, D07 commercial
+fields/vendor verification and D09 review capacity remain unresolved. D02/D04/D05
+and D08 production/delivery dependencies and C0–C6 remain blocked. This scope
+creates no production role, permission, account or integration authorization.
