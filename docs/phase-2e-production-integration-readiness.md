@@ -183,3 +183,10 @@ The [acceptance plan](phase-2e-acceptance-plan.md) makes these conditions testab
 The [roadmap](phase-2e-roadmap.md) limits November 30 commitments to feasible,
 separately approved offline/synthetic work. The 2nd Brain is outside the critical
 path and must not be implemented under this assessment or the proposed next branch.
+
+## M2 design follow-up
+
+The [storage/recovery/audit design](phase-2e-storage-recovery-audit-design.md)
+and [nine synthetic tabletop cases](phase-2e-operations-tabletop.md) document
+roadmap M2 after merged PR #16. They add no executable behavior or production
+evidence; hosting, custody, staffing, admission and restart remain blocked.

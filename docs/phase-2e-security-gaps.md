@@ -159,3 +159,11 @@ of real authority: current contracts accept only inactive synthetic records and
 cannot issue production authorization. Real evidence custody, reviewer identity,
 artifact verification and validity enforcement must be separately designed and
 proved before any operating approval.
+
+## M2 evidence disposition
+
+The [M2 design](phase-2e-storage-recovery-audit-design.md) and
+[tabletops](phase-2e-operations-tabletop.md) describe G02/G06–G11 and their
+AT-04–08/AT-12/AT-13/AT-16 dependencies. They are paper analysis only.
+G03/G04 retain production gaps despite merged synthetic identity contracts.
+No severity is downgraded, production gate closed or external transport added.
