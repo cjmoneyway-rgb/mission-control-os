@@ -555,3 +555,11 @@ capability is added; `syn-hubspot` and all six other connectors remain disabled.
 ```sh
 python -B scripts/demo_hubspot_projection.py --synthetic-development
 ```
+
+### Phase 2E M4 protected evidence review
+
+The [readiness evidence review](docs/phase-2e-readiness-evidence-review.md)
+reconciles merged M1–M3 claims, historical regression artifacts, paper tabletops,
+public workflow status and CEO-provided reports without conflating their proof.
+Missing production evidence and organizational decisions remain blocked. M4 adds
+only documentation, runs no tests/services and issues no M5 or activation decision.

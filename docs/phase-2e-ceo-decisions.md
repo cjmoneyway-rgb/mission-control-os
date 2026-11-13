@@ -93,3 +93,13 @@ sessions. D01/D03 assignments/custody, D06 admission/retention, D07 commercial
 fields/vendor verification and D09 review capacity remain unresolved. D02/D04/D05
 and D08 production/delivery dependencies and C0–C6 remain blocked. This scope
 creates no production role, permission, account or integration authorization.
+
+## M4 decision reconciliation — M5 not issued
+
+The [current evidence review](phase-2e-readiness-evidence-review.md#gap-triage-and-unresolved-ceo-decisions)
+retains D01–D09 required choices, recommendations, consequences and blocked
+production status. D10's initial branch proposal above is historical; the current
+authorization is M4 documentation/evidence review only, not future implementation.
+The [M5 checklist](phase-2e-readiness-evidence-review.md#m5-preparation-checklist--no-decision-issued)
+prepares options for a later CEO decision without selecting one or assigning
+people, approving production terms or granting operational authority.
