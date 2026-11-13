@@ -167,3 +167,12 @@ The [M2 design](phase-2e-storage-recovery-audit-design.md) and
 AT-04–08/AT-12/AT-13/AT-16 dependencies. They are paper analysis only.
 G03/G04 retain production gaps despite merged synthetic identity contracts.
 No severity is downgraded, production gate closed or external transport added.
+
+## M4 evidence reconciliation — no severity reduction
+
+The [M4 review](phase-2e-readiness-evidence-review.md#gap-triage-and-unresolved-ceo-decisions)
+preserves G01–G18 and D01–D09 production dispositions. Synthetic implementations,
+local historical test results and M2 paper scenarios do not close custody, real
+identity, protected hosting, independent audit/recovery, admission or staffing gaps.
+Missing/expired/conflicting evidence remains unavailable, stale or blocked rather
+than being converted into production approval by a combined report.

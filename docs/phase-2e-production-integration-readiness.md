@@ -197,3 +197,11 @@ The [M3 mock](phase-2e-hubspot-mocked-projection.md) adds process-local fictiona
 contact/company projection contracts and offline negative tests only. M1/M2
 boundaries, exact operational denial and all seven disabled connectors remain.
 No real HubSpot read, credential, data admission or vendor proof is supplied.
+
+## M4 protected evidence review
+
+The [M4 evidence index](phase-2e-readiness-evidence-review.md) binds merged M1–M3
+to baseline `b83916755bcaec29526e01f9d64ad1231c4540af`, distinguishes local
+historical execution, design/tabletops, public status, CEO-reported screenshot
+counters and unavailable authenticated logs, and prepares M5 without deciding it.
+No production acceptance, organizational authority or connector gate is closed.

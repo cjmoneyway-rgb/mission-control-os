@@ -115,3 +115,15 @@ After merged M2 PR #17 at `79ab81bdb7edb37ca106b36bfb4bbd148cf348b9`, the
 [M3 contract](phase-2e-hubspot-mocked-projection.md) implements only the conditional
 fictional contact/company slice. No live read or deal/lifecycle properties are
 included. Dates remain conditional; vendor/admission/custody gates are not closed.
+
+## Current sequence after PR #18 — M4 review preparation
+
+M1 (PR #16), M2 (PR #17) and M3 (PR #18) are merged at current baseline
+`b83916755bcaec29526e01f9d64ad1231c4540af`. Earlier next-branch suggestions
+and pending-review notes above describe their historical stages, not new work
+authorization. The next numbered milestone is M4 protected review/contingency,
+now documented for CEO review in the [evidence review](phase-2e-readiness-evidence-review.md).
+M5 remains a later consolidated human review; no M5 decision is issued.
+November 26–29/30 windows remain conditional planning targets, not a requirement
+to delay a separately authorized documentation review or to begin production.
+Slack formatting remains optional stretch only, not the default next component.

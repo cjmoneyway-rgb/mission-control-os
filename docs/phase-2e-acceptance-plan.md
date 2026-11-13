@@ -125,3 +125,15 @@ restart, unknown outcomes never authorize blind replay, and history is preserved
 cover AT-01–03, AT-07–08, AT-10–12, AT-15 and AT-16 with fictional fixtures and
 existing identity/authorization. No vendor signature, durable delivery/recovery,
 confidential admission, production identity or real erasure proof is claimed.
+
+## M4 documentation and evidence review
+
+[M4 acceptance coverage](phase-2e-readiness-evidence-review.md#acceptance-coverage-and-production-disposition)
+primarily addresses AT-16 evidence organization and preserves AT-01–08, AT-10–13
+and AT-15 boundaries. No production criterion is closed from synthetic, tabletop,
+public-status-only or CEO-provided evidence. The
+[paper counterexamples](phase-2e-readiness-evidence-review.md#protected-review-contingency-and-paper-walkthroughs)
+show denial for missing, wrong-commit, stale, conflicting, log-unavailable and
+tabletop-only evidence, unknown outcomes, incomplete coverage and premature
+authority. They are reasoned desk checks, not functional tests or recovery drills.
+The existing rollback/human restart matrix remains unchanged.
