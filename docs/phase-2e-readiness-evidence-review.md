@@ -218,3 +218,11 @@ review and operational authority remain unresolved. The outside-repository packa
 `/workspace/phase-2e-m4-review/` contains the complete patch, reviewed file hashes,
 source-artifact digests, exact change inventory, validation transcript and
 state/acceptance summary. No commit, push, test, service or M5 decision is part of M4.
+
+## M5 package provenance update
+
+M4 merged through PR #19 at `baff61d528043e1cd26747e15703355192d3916f`.
+The subsequent [M5 consolidated review](phase-2e-consolidated-readiness-review.md)
+uses this exact baseline, retains this evidence vocabulary and preserves unavailable,
+stale, conflicting and blocked states. M5 preparation does not retroactively change
+M4 evidence or issue a CEO disposition.

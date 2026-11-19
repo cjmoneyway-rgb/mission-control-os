@@ -205,3 +205,11 @@ to baseline `b83916755bcaec29526e01f9d64ad1231c4540af`, distinguishes local
 historical execution, design/tabletops, public status, CEO-reported screenshot
 counters and unavailable authenticated logs, and prepares M5 without deciding it.
 No production acceptance, organizational authority or connector gate is closed.
+
+## M5 consolidated review
+
+The [M5 package](phase-2e-consolidated-readiness-review.md) reconciles the complete
+M1–M4 evidence chain at baseline `baff61d528043e1cd26747e15703355192d3916f`.
+It presents CEO disposition options but does not select one. Production identity,
+storage, custody, audit, recovery, admission, operations, delivery and every
+connector activation gate remain blocked.

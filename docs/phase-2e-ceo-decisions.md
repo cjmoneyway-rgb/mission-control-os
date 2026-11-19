@@ -103,3 +103,11 @@ authorization is M4 documentation/evidence review only, not future implementatio
 The [M5 checklist](phase-2e-readiness-evidence-review.md#m5-preparation-checklist--no-decision-issued)
 prepares options for a later CEO decision without selecting one or assigning
 people, approving production terms or granting operational authority.
+
+## M5 CEO worksheet — no disposition selected
+
+The [M5 consolidated package](phase-2e-consolidated-readiness-review.md) presents
+four options: accept the synthetic milestone only, accept with documented
+conditions, defer, or reject for correction. No option is selected in the
+repository. D01–D09 owners, deputies, custodians and reviewers remain unassigned;
+production, admission, activation and deployment remain separately gated.

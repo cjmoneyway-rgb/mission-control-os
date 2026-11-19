@@ -137,3 +137,11 @@ show denial for missing, wrong-commit, stale, conflicting, log-unavailable and
 tabletop-only evidence, unknown outcomes, incomplete coverage and premature
 authority. They are reasoned desk checks, not functional tests or recovery drills.
 The existing rollback/human restart matrix remains unchanged.
+
+## M5 consolidated acceptance disposition
+
+The [M5 matrix](phase-2e-consolidated-readiness-review.md#consolidated-acceptance-matrix--production-blocked)
+classifies all AT-01–AT-16 criteria as production BLOCKED while preserving bounded
+synthetic and conditional-design evidence. M5 does not rerun tests, perform a drill
+or convert technical evidence into approval. Reconsideration requires current,
+independently reviewed evidence and named human authority for the exact scope.

@@ -563,3 +563,11 @@ reconciles merged M1–M3 claims, historical regression artifacts, paper tableto
 public workflow status and CEO-provided reports without conflating their proof.
 Missing production evidence and organizational decisions remain blocked. M4 adds
 only documentation, runs no tests/services and issues no M5 or activation decision.
+
+### Phase 2E M5 consolidated readiness review
+
+The [consolidated readiness review](docs/phase-2e-consolidated-readiness-review.md)
+combines M1–M4 evidence into a decision-ready CEO package without selecting a
+disposition or creating operating authority. All 16 acceptance criteria, D01–D09,
+twelve production controls, G13–G18 and 49 connector-gate cells remain blocked or
+unverified. All seven connectors remain disabled and unresolved.

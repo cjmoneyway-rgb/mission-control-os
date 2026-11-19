@@ -127,3 +127,11 @@ M5 remains a later consolidated human review; no M5 decision is issued.
 November 26–29/30 windows remain conditional planning targets, not a requirement
 to delay a separately authorized documentation review or to begin production.
 Slack formatting remains optional stretch only, not the default next component.
+
+## M5 consolidated human review preparation
+
+M4 is merged through PR #19 at `baff61d528043e1cd26747e15703355192d3916f`.
+The [M5 consolidated review](phase-2e-consolidated-readiness-review.md) is the next
+numbered documentation milestone. It prepares a bounded CEO disposition without
+selecting it, assigning owners or authorizing implementation. Production work and
+connector activation remain separate future scopes.
