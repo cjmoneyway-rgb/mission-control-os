@@ -176,3 +176,11 @@ local historical test results and M2 paper scenarios do not close custody, real
 identity, protected hosting, independent audit/recovery, admission or staffing gaps.
 Missing/expired/conflicting evidence remains unavailable, stale or blocked rather
 than being converted into production approval by a combined report.
+
+## M5 consolidated disposition — gaps preserved
+
+The [M5 review](phase-2e-consolidated-readiness-review.md) preserves all existing
+gap severities and blocked states. Combining M1 synthetic tests, M2 conditional
+design, M3 fictional projections, M4 evidence organization and public/CEO-provided
+workflow evidence does not close production identity, custody, hosting, audit,
+recovery, admission, staffing, vendor or delivery gaps.
